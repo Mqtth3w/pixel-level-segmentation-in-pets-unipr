@@ -23,12 +23,15 @@ def get_args():
     parser.add_argument('--print_every', type=int, default=500, help='print losses every N iteration')
 
     parser.add_argument('--lr', type=float, default=0.0001, help='learning rate')
-    parser.add_argument('--opt', type=str, default='Adam', choices=['SGD', 'Adam'], help = 'optimizer used for training')
-    parser.add_argument('--use_norm', action='store_true', help='use normalization layers in model')
-    parser.add_argument('--feat', type=int, default=16, help='number of features in model')
+    parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'optimizer used for training')
+    parser.add_argument('--loss', type=str, default='BCE', choices=['BCE', 'dice', 'iou'], help = 'loss function used for training')
+    parser.add_argument('--momentum', type=float, default=0.9, help='momentum')
+    parser.add_argument('--weight_deacy', type=float, default=0.00001, help='weight decay')
+    #parser.add_argument('--use_norm', action='store_true', help='use normalization layers in model')
+    #parser.add_argument('--feat', type=int, default=16, help='number of features in model')
 
     parser.add_argument('--dataset_path', type=str, default='./data', help='path were to save/get the dataset')
-    parser.add_argument('--checkpoint_path', type=str, default='./', help='path were to save the trained model')
+    parser.add_argument('--checkpoint_path', type=str, default='./checkpoint', help='path were to save the trained model')
 
     parser.add_argument('--resume_train', action='store_true', help='load the model from checkpoint before training')
 
@@ -41,7 +44,8 @@ def main(args):
     transform = transforms.Compose([
         transforms.Resize((256, 256)),
         transforms.ToTensor(),
-        ])#transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0041, 0.0040, 0.0042))])
+    # custom normalization, the values were calculated with the "get_mean_std.py" script
 
     # load train ds 
     trainset = torchvision.datasets.OxfordIIITPet(root=args.dataset_path, split="trainval",

@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor()])
 
 # Load the dataset
-dataset = datasets.OxfordIIITPet(root='.', split='test', download=True, transform=transform)
+dataset = datasets.OxfordIIITPet(root='.', split='trainval', download=True, transform=transform)
 loader = DataLoader(dataset, batch_size=64, shuffle=False)
 
 # Compute mean and std
@@ -32,5 +32,5 @@ Std: tensor([0.0041, 0.0040, 0.0042])
 Mean: tensor([0.0077, 0.0072, 0.0063])
 Std: tensor([0.0042, 0.0041, 0.0043])
 
-# norm -> mean 0, std 1
+# normalization -> mean 0, std 1
 '''
