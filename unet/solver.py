@@ -13,23 +13,20 @@ from model import Net
 
 # Define loss/help functions
 def iou(pred, target):
-    smooth = 1e-6 # avoid zero division
+    smooth = 1e-7 # avoid zero division
     intersection = (pred * target).sum()
     union = pred.sum() + target.sum() - intersection
     iou = (intersection + smooth) / (union + smooth)
     return iou
 
-def iou_loss(pred, target):
-    return 1 - iou(pred, target)
-
 def dc_loss(pred, target):
-    smooth = 1e-6 # avoid zero division
+    smooth = 1e-7 # avoid zero division
     predf = pred.view(-1)
     targetf = target.view(-1)
     intersection = (predf * targetf).sum()
-    return 1 - ((2. * intersection + smooth) /
+    dice = 1 - ((2. * intersection + smooth) /
               (predf.sum() + targetf.sum() + smooth))
-
+    return dice.mean() # the mean make it more stable
 
 class Solver(object):
     """Solver for training and testing."""
@@ -48,12 +45,10 @@ class Solver(object):
             self.load_model()
         
         # Define Loss function
-        if self.args.loss == "BCE": # not the bank, lol
+        if self.args.loss == "BCE":
             self.criterion = nn.BCELoss()
         elif self.args.loss == "dice":
             self.criterion = dc_loss()
-        elif self.args.loss == "iou":
-            self.criterion == iou_loss()
 
         # Choose optimizer 
         if self.args.opt == "Adam":
@@ -64,7 +59,7 @@ class Solver(object):
                                            momentum=self.args.momentum, foreach=True)
         elif self.args.opt == "SGD":
             self.optimizer = optim.SGD(self.net.parameters(), lr=self.args.lr, momentum=0.9, foreach=True)
-        
+        #torch.optim.lr_scheduler.StepLR
         self.epochs = self.args.epochs
         self.train_loader = train_loader
         self.test_loader = test_loader
@@ -86,6 +81,11 @@ class Solver(object):
         print("Model loaded!")
     
     def train(self):
+        # To save only the best model
+        best_iou = 0.0 
+        # For early stopping 
+        bad_epochs_ctr = 0
+        
         self.net.train()
         for epoch in range(self.epochs):  # loop over the dataset multiple times
 
@@ -105,8 +105,36 @@ class Solver(object):
                 self.optimizer.step()
 
                 running_loss += loss.item()
+                
+                if batch % self.args.print_every == self.args.print_every - 1:  
+                    
+                    print(f'[epoch={epoch + 1}, batch={batch + 1:5d}] trainig loss: {running_loss / self.args.print_every:.4f}')
 
+                    self.writer.add_scalar('training loss',
+                        running_loss / self.args.print_every,
+                        epoch * len(self.train_loader) + batch)
+                    
+                    running_loss = 0.0
 
+                    # Test the model
+                    #self.test(epoch, batch)
+                
+            #self.save_model()
+            # Test the model (for each epoch it's more regular and standard than with print_every)
+            iou, l1_distance, test_loss = self.test(epoch, 0)
+
+            # Save the best model only
+            if iou > best_iou:
+                best_iou = iou
+                self.save_model()
+                print(f"New best model saved with IoU={best_iou:.4f}, L1 distance={l1_distance:.4f}.")
+            else:
+                bad_epochs_ctr += 1
+
+            # Early stopping
+            if bad_epochs_ctr >= self.args.patience:
+                print(f"Early stopping triggered with patience {self.args.ptience} at epoch {epoch + 1}.")
+                break
 
         self.writer.flush()
         self.writer.close()
@@ -148,11 +176,11 @@ class Solver(object):
         avg_iou = tot_iou / num_batches
         avg_l1_distance = tot_l1_distance / num_batches
 
-        self.writer.add_scalar('Test Loss (avg on batches)', 
+        self.writer.add_scalar('Test Loss (avg on test)', 
                                avg_test_loss, epoch * num_batches + batch)
-        self.writer.add_scalar('IoU (avg on batches)', 
+        self.writer.add_scalar('IoU (avg on test)', 
                                avg_iou, epoch * num_batches + batch)
-        self.writer.add_scalar('L1 Distance (avg on batches)', 
+        self.writer.add_scalar('L1 Distance (avg on test)', 
                                avg_l1_distance, epoch * num_batches + batch)
 
         print(f"Epoch {epoch}, Batch {batch}:")
@@ -160,3 +188,4 @@ class Solver(object):
         print(f"Avg IoU: {avg_iou:.4f}.")
         print(f"Avg L1 Distance: {avg_l1_distance:.4f}.\n")
         self.net.train()
+        return avg_iou, avg_l1_distance, avg_test_loss
