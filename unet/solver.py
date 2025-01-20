@@ -90,7 +90,7 @@ class Solver(object):
 
         self.net.train()
         for epoch in range(self.epochs):  # loop over the dataset multiple times
-
+            # epoch loss
             running_loss = 0.0
             loop = tqdm(enumerate(self.train_loader), total = len(self.train_loader), leave = False)
             for batch, (imgs, masks) in loop:
@@ -110,32 +110,37 @@ class Solver(object):
                 self.optimizer.step()
 
                 running_loss += loss.item()
+                # show batch loss
+                loop.set_postfix(loss=loss.item())
 
-            # epoch finished
+            # epoch finished, print statistics
             self.writer.add_scalar('training loss',
                     running_loss / len(self.train_loader),
                     epoch * len(self.train_loader))
+            print(f"Epoch {epoch+1}, training loss {running_loss / len(self.train_loader)}")
 
             # test the model (for each epoch it's more regular and standard than with print_every)
-            iou, l1_distance = self.test(epoch)
+            iou, l1_distance = self.test(epoch+1)
             #self.save_model()
             # save the best model only
             if iou > best_iou or (iou == best_iou and l1_distance < best_l1_distance):
                 best_iou = iou
                 best_l1_distance = l1_distance
                 self.save_model()
-                print(f"New best model saved with IoU={best_iou:.4f}, L1 distance={best_l1_distance:.4f}.")
+                self.writer.add_text('Info best model', f"New best model saved with IoU {best_iou:.4f}, L1 distance {best_l1_distance:.4f}")
+                print(f"New best model saved with IoU {best_iou:.4f}, L1 distance {best_l1_distance:.4f}")
             else:
                 bad_epochs_ctr += 1
 
             # early stopping
             if bad_epochs_ctr >= self.args.patience:
-                print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}.")
+                self.writer.add_text('Info early stopping ', f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
+                print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
                 break
 
         self.writer.flush()
         self.writer.close()
-        print('Finished Training')   
+        print("Finished Training")   
     
     def test(self, epoch):
         # now lets evaluate the model on the test set
@@ -181,8 +186,8 @@ class Solver(object):
                                avg_l1_distance, epoch * num_batches)
 
         print(f"Epoch {epoch}, test data:")
-        print(f"Avg test Loss: {avg_test_loss:.4f}.")
-        print(f"Avg IoU: {avg_iou:.4f}.")
-        print(f"Avg L1 Distance: {avg_l1_distance:.4f}.\n")
+        print(f"Avg test Loss: {avg_test_loss:.4f}")
+        print(f"Avg IoU: {avg_iou:.4f}")
+        print(f"Avg L1 Distance: {avg_l1_distance:.4f}\n")
         self.net.train()
         return avg_iou, avg_l1_distance

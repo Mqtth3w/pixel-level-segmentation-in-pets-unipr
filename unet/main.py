@@ -50,22 +50,37 @@ def main(args):
         transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0041, 0.0040, 0.0042))])
     # custom normalization, the values were calculated with the "get_mean_std.py" script
 
-    test_transform = transforms.Compose([
+    img_test_transform = transforms.Compose([
         transforms.Resize((256, 256)), # UNet size
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0041, 0.0040, 0.0042))])
     # custom normalization, the values were calculated with the "get_mean_std.py" script
 
+    mask_test_transform = transforms.Compose([
+        transforms.Resize((256, 256)), # UNet size
+        transforms.ToTensor()])
+
     # load train ds 
-    trainset = torchvision.datasets.OxfordIIITPet(root=args.dataset_path, split="trainval",
-                                                  target_types="segmentation", transform=train_transform, download=True)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=args.batch_size,
-                                            shuffle=True, num_workers=args.workers)
+    trainset = torchvision.datasets.OxfordIIITPet(root=args.dataset_path, 
+                                                  split="trainval",
+                                                  target_types="segmentation", 
+                                                  transform=train_transform, 
+                                                  download=True)
+    trainloader = torch.utils.data.DataLoader(trainset, 
+                                              batch_size=args.batch_size,
+                                              shuffle=True, 
+                                              num_workers=args.workers)
     # load test ds
-    testset = torchvision.datasets.OxfordIIITPet(root=args.dataset_path, split="test", target_types="segmentation",
-                                                 transform=test_transform, target_transform=test_transform, download=True)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size,
-                                            shuffle=False, num_workers=args.workers)
+    testset = torchvision.datasets.OxfordIIITPet(root=args.dataset_path, 
+                                                 split="test", 
+                                                 target_types="segmentation",
+                                                 transform=img_test_transform, 
+                                                 target_transform=mask_test_transform, 
+                                                 download=True)
+    testloader = torch.utils.data.DataLoader(testset, 
+                                             batch_size=args.batch_size,
+                                             shuffle=False,
+                                             num_workers=args.workers)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
     print("Device: ", device)

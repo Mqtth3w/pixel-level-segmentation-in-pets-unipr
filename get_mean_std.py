@@ -1,15 +1,20 @@
+'''
+@author Matteo Gianvenuti https://GitHub.com/Mqtth3w
+@license GPL-3.0
+'''
+
 import torch
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
-# Define a transform to only convert to Tensor (no normalization yet)
+# define a transform to only convert to Tensor (no normalization yet)
 transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor()])
 
-# Load the dataset
+# load the dataset
 dataset = datasets.OxfordIIITPet(root='.', split='trainval', download=True, transform=transform)
 loader = DataLoader(dataset, batch_size=64, shuffle=False)
 
-# Compute mean and std
+# compute mean and std
 mean = torch.zeros(3)
 std = torch.zeros(3)
 for images, _ in loader:
@@ -17,7 +22,7 @@ for images, _ in loader:
     mean += images.mean(0)
     std += images.std(0)
 
-# Normalize by the number of images
+# normalize by the number of images
 mean /= len(dataset)
 std /= len(dataset)
 
