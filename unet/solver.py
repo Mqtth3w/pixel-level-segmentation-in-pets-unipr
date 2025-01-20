@@ -37,20 +37,20 @@ class Solver(object):
         self.args = args
         self.model_name = 'OxfordIIITPet_UNet_{}.pth'.format(self.args.model_name)
 
-        # Define the model
+        # define the model
         self.net = Net(self.args).to(device)
 
         # load a pretrained model
         if self.args.resume_train == True:
             self.load_model()
         
-        # Define Loss function
+        # define Loss function
         if self.args.loss == "BCE":
             self.criterion = nn.BCELoss()
         elif self.args.loss == "dice":
             self.criterion = dc_loss()
 
-        # Choose optimizer 
+        # choose optimizer 
         if self.args.opt == "Adam":
             self.optimizer = optim.Adam(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay, 
                                         foreach=True)
@@ -58,7 +58,8 @@ class Solver(object):
             self.optimizer = optim.RMSprop(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay, 
                                            momentum=self.args.momentum, foreach=True)
         elif self.args.opt == "SGD":
-            self.optimizer = optim.SGD(self.net.parameters(), lr=self.args.lr, momentum=0.9, foreach=True)
+            self.optimizer = optim.SGD(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay,
+                                       momentum=self.args.momentum, foreach=True)
         #torch.optim.lr_scheduler.StepLR
         self.epochs = self.args.epochs
         self.train_loader = train_loader
@@ -81,17 +82,21 @@ class Solver(object):
         print("Model loaded!")
     
     def train(self):
-        # To save only the best model
+        # to save only the best model
         best_iou = 0.0 
-        # For early stopping 
+        best_l1_distance = 1000
+        # for early stopping 
         bad_epochs_ctr = 0
-        
+
         self.net.train()
         for epoch in range(self.epochs):  # loop over the dataset multiple times
 
             running_loss = 0.0
             loop = tqdm(enumerate(self.train_loader), total = len(self.train_loader), leave = False)
             for batch, (imgs, masks) in loop:
+                # add loop info
+                loop.set_description(f"Epoch [{epoch+1}/{self.epochs}]")
+
                 # put data on correct device
                 imgs = imgs.to(self.device)
                 masks = masks.to(self.device) # the ground truth mask
@@ -105,42 +110,34 @@ class Solver(object):
                 self.optimizer.step()
 
                 running_loss += loss.item()
-                
-                if batch % self.args.print_every == self.args.print_every - 1:  
-                    
-                    print(f'[epoch={epoch + 1}, batch={batch + 1:5d}] trainig loss: {running_loss / self.args.print_every:.4f}')
 
-                    self.writer.add_scalar('training loss',
-                        running_loss / self.args.print_every,
-                        epoch * len(self.train_loader) + batch)
-                    
-                    running_loss = 0.0
+            # epoch finished
+            self.writer.add_scalar('training loss',
+                    running_loss / len(self.train_loader),
+                    epoch * len(self.train_loader))
 
-                    # Test the model
-                    #self.test(epoch, batch)
-                
+            # test the model (for each epoch it's more regular and standard than with print_every)
+            iou, l1_distance = self.test(epoch)
             #self.save_model()
-            # Test the model (for each epoch it's more regular and standard than with print_every)
-            iou, l1_distance, test_loss = self.test(epoch, 0)
-
-            # Save the best model only
-            if iou > best_iou:
+            # save the best model only
+            if iou > best_iou or (iou == best_iou and l1_distance < best_l1_distance):
                 best_iou = iou
+                best_l1_distance = l1_distance
                 self.save_model()
-                print(f"New best model saved with IoU={best_iou:.4f}, L1 distance={l1_distance:.4f}.")
+                print(f"New best model saved with IoU={best_iou:.4f}, L1 distance={best_l1_distance:.4f}.")
             else:
                 bad_epochs_ctr += 1
 
-            # Early stopping
+            # early stopping
             if bad_epochs_ctr >= self.args.patience:
-                print(f"Early stopping triggered with patience {self.args.ptience} at epoch {epoch + 1}.")
+                print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}.")
                 break
 
         self.writer.flush()
         self.writer.close()
         print('Finished Training')   
     
-    def test(self, epoch, batch):
+    def test(self, epoch):
         # now lets evaluate the model on the test set
         # Intersection over Union, L1 distance are good metrics to evaluate the results
         # init loss and iou, l1 metrics
@@ -176,16 +173,16 @@ class Solver(object):
         avg_iou = tot_iou / num_batches
         avg_l1_distance = tot_l1_distance / num_batches
 
-        self.writer.add_scalar('Test Loss (avg on test)', 
-                               avg_test_loss, epoch * num_batches + batch)
+        self.writer.add_scalar('test loss (avg on test)', 
+                               avg_test_loss, epoch * num_batches)
         self.writer.add_scalar('IoU (avg on test)', 
-                               avg_iou, epoch * num_batches + batch)
+                               avg_iou, epoch * num_batches)
         self.writer.add_scalar('L1 Distance (avg on test)', 
-                               avg_l1_distance, epoch * num_batches + batch)
+                               avg_l1_distance, epoch * num_batches)
 
-        print(f"Epoch {epoch}, Batch {batch}:")
+        print(f"Epoch {epoch}, test data:")
         print(f"Avg test Loss: {avg_test_loss:.4f}.")
         print(f"Avg IoU: {avg_iou:.4f}.")
         print(f"Avg L1 Distance: {avg_l1_distance:.4f}.\n")
         self.net.train()
-        return avg_iou, avg_l1_distance, avg_test_loss
+        return avg_iou, avg_l1_distance
