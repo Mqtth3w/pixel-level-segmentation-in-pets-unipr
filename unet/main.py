@@ -10,6 +10,7 @@ import argparse
 from torch.utils.tensorboard import SummaryWriter
 
 from solver import Solver
+from train_dataset import OxfordIIITPetTrainDataset
 
 def get_args():
     parser = argparse.ArgumentParser()   
@@ -42,30 +43,22 @@ def main(args):
     writer = SummaryWriter('./runs/' + args.run_name)
 
     # define transforms
-    train_transform = transforms.Compose([
-        transforms.Resize((256, 256)), # UNet size
-        transforms.RandomHorizontalFlip(),
-        #transforms.RandomRotation(10), # out of size
-        transforms.ToTensor(),
-        transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0041, 0.0040, 0.0042))])
-    # custom normalization, the values were calculated with the "get_mean_std.py" script
+    # train transforms are already defined inside the custom dataset
 
     img_test_transform = transforms.Compose([
         transforms.Resize((256, 256)), # UNet size
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0041, 0.0040, 0.0042))])
     # custom normalization, the values were calculated with the "get_mean_std.py" script
-
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256)), # UNet size
         transforms.ToTensor()])
 
     # load train ds 
-    trainset = torchvision.datasets.OxfordIIITPet(root=args.dataset_path, 
-                                                  split="trainval",
-                                                  target_types="segmentation", 
-                                                  transform=train_transform, 
-                                                  download=True)
+    trainset = OxfordIIITPetTrainDataset(root=args.dataset_path, 
+                                         split="trainval",
+                                         target_types="segmentation", 
+                                         download=True)
     trainloader = torch.utils.data.DataLoader(trainset, 
                                               batch_size=args.batch_size,
                                               shuffle=True, 
