@@ -8,10 +8,13 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 
 # define a transform to only convert to Tensor (no normalization yet)
-transform = transforms.Compose([transforms.Resize((256, 256)), transforms.ToTensor()])
+transform = transforms.Compose([
+    transforms.Resize((256, 256), # UNet size
+                      interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
+    transforms.ToTensor()])
 
 # load the dataset
-dataset = datasets.OxfordIIITPet(root='.', split='trainval', download=True, transform=transform)
+dataset = datasets.OxfordIIITPet(root='.', split='test', download=True, transform=transform)
 loader = DataLoader(dataset, batch_size=64, shuffle=False)
 
 # compute mean and std
@@ -29,10 +32,17 @@ std /= len(dataset)
 print(f"Mean: {mean}")
 print(f"Std: {std}")
 '''
+# BILINEAR
 #trainval
 Mean: tensor([0.0075, 0.0070, 0.0062])
 Std: tensor([0.0041, 0.0040, 0.0042])
+#test
+Mean: tensor([0.0077, 0.0072, 0.0063])
+Std: tensor([0.0042, 0.0041, 0.0043])
 
+# BICUBIC
+Mean: tensor([0.0075, 0.0070, 0.0062])
+Std: tensor([0.0042, 0.0041, 0.0042])
 #test
 Mean: tensor([0.0077, 0.0072, 0.0063])
 Std: tensor([0.0042, 0.0041, 0.0043])
