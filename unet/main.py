@@ -7,7 +7,6 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import argparse
-import numpy as np
 from torch.utils.tensorboard import SummaryWriter
 
 from solver import Solver
