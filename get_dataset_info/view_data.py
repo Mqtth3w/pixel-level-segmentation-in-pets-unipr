@@ -24,17 +24,20 @@ mask = Image.open('Desktop/DL/project/oxford-iiit-pet/annotations/trimaps/Abyssi
 figure.add_subplot(rows, cols, 2)
 plt.imshow(mask)
 plt.axis("off")
-plt.show()
+#plt.show()
 
-#t = transform(img)
+t = transform(img)
 #print(t)
-
+print(t.size())
 t2 = transform(mask)
+#torch.set_printoptions(threshold=torch.inf)
+#print(t2)
+print(t2.size())
 
+
+'''
 if torch.any(t2 != 0.0078):
     print("diff.")
 else:
     print("all eq.")
-
-#torch.set_printoptions(threshold=torch.inf)
-#print(t2)
+'''

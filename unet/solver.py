@@ -28,6 +28,9 @@ def dc_loss(pred, target):
               (predf.sum() + targetf.sum() + smooth))
     return dice.mean() # the mean make it more stable
 
+def dc_bce_loss(pred, target):
+    return nn.BCEloss(pred, target) + dc_loss(pred, target)
+
 class Solver(object):
     """Solver for training and testing."""
 
@@ -35,7 +38,7 @@ class Solver(object):
         """Initialize configurations."""
 
         self.args = args
-        self.model_name = 'OxfordIIITPet_UNet_{}.pth'.format(self.args.model_name)
+        self.model_name = 'OxfordIIITPet_{}.pth'.format(self.args.model_name)
 
         # define the model
         self.net = Net(self.args).to(device)
@@ -45,22 +48,26 @@ class Solver(object):
             self.load_model()
         
         # define Loss function
-        if self.args.loss == "BCE":
-            self.criterion = nn.BCELoss()
-        elif self.args.loss == "dice":
-            self.criterion = dc_loss()
+        if self.args.loss == "dice": # it's similar to IoU but faster in convergence and more stable
+            self.criterion = dc_loss() # focus on overlap btween pred mask and ground truth
+        elif self.args.loss == "BCE": # the model already contain the sigmoid ([0, 1] values needed)
+            self.criterion = nn.BCELoss() # measure the entropy btween pred mask and ground truth
+        elif self.args.loss == "combo": # I saw this from milesial/Pytorch-UNet and I wanted to try it
+            self.criterion = dc_bce_loss()
 
         # choose optimizer 
-        if self.args.opt == "Adam":
+        if self.args.opt == "Adam": # more adaptive (faster convergence) and robust (e.g., bad initial lr)
             self.optimizer = optim.Adam(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay, 
-                                        foreach=True)
-        elif self.args.opt == "RSMprop":
+                                        foreach=True) # Adam is also reccomended by google developers forum
+        elif self.args.opt == "RSMprop": # used by milesial/Pytorch-UNet but I think Adam is better as said before
             self.optimizer = optim.RMSprop(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay, 
                                            momentum=self.args.momentum, foreach=True)
-        elif self.args.opt == "SGD":
+        elif self.args.opt == "SGD": # static lr, not very good I think I will not use it here
             self.optimizer = optim.SGD(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay,
                                        momentum=self.args.momentum, foreach=True)
-        #torch.optim.lr_scheduler.StepLR
+        
+        # scheduler to reduce lr during the trainig for better convergence ?? not really necessary with Adam
+
         self.epochs = self.args.epochs
         self.train_loader = train_loader
         self.test_loader = test_loader
@@ -122,7 +129,7 @@ class Solver(object):
             # test the model (for each epoch it's more regular and standard than with print_every)
             iou, l1_distance = self.test(epoch+1)
             #self.save_model()
-            # save the best model only
+            # save only the best model 
             if iou > best_iou or (iou == best_iou and l1_distance < best_l1_distance):
                 best_iou = iou
                 best_l1_distance = l1_distance

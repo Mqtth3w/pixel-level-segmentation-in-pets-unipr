@@ -18,16 +18,17 @@ def get_args():
     parser.add_argument('--run_name', type=str, default="run_1", help='Name of current run')
     parser.add_argument('--model_name', type=str, default="first_train", help='Name of the model to be saved/loaded')
 
-    parser.add_argument('--epochs', type=int, default=30, help='Number of epochs')
+    parser.add_argument('--epochs', type=int, default=35, help='Number of epochs')
     parser.add_argument('--batch_size', type=int, default=32, help='Number of elements in batch size')
     parser.add_argument('--workers', type=int, default=2, help='Number of workers in data loader')
     #parser.add_argument('--print_every', type=int, default=500, help='Print losses every N iteration.')
 
     parser.add_argument('--lr', type=float, default=1e-5, help='Learning rate.')
     parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'Optimizer used for training')
-    parser.add_argument('--loss', type=str, default='BCE', choices=['BCE', 'dice'], help = 'Loss function used for training')
+    parser.add_argument('--loss', type=str, default='dice', choices=['BCE', 'dice', 'combo'], help = 'Loss function used for training')
     parser.add_argument('--patience', type=float, default=5, help='Patience for early stopping')
-    parser.add_argument('--momentum', type=float, default=0.9, help='Momentum')
+    #parser.add_argument('--patience2', type=float, default=3, help='Patience used by the scheduler to reduce the lr')
+    parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for bad gradient cases (e.g., flat zone)')
     parser.add_argument('--weight_deacy', type=float, default=1e-8, help='Weight decay for L2 regularization')
     #parser.add_argument('--use_norm', action='store_true', help='Use normalization layers in model')
     #parser.add_argument('--feat', type=int, default=16, help='Number of features in model')
@@ -43,7 +44,7 @@ def main(args):
     writer = SummaryWriter('./runs/' + args.run_name)
 
     # define transforms
-    # train transforms are already defined inside the custom dataset
+    # train transforms are already defined inside the custom train dataset
 
     img_test_transform = transforms.Compose([
         transforms.Resize((256, 256)), # UNet size
