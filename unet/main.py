@@ -7,6 +7,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import argparse
+import numpy as np
 from torch.utils.tensorboard import SummaryWriter
 
 from solver import Solver
@@ -47,13 +48,15 @@ def main(args):
     # train transforms are already defined inside the custom train dataset
 
     img_test_transform = transforms.Compose([
-        transforms.Resize((256, 256)), # UNet size
+        transforms.Resize((256, 256), # UNet size
+                          interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
         transforms.ToTensor(),
-        transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0041, 0.0040, 0.0042))])
+        transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0042, 0.0041, 0.0042))])
     # custom normalization, the values were calculated with the "get_mean_std.py" script
     mask_test_transform = transforms.Compose([
-        transforms.Resize((256, 256)), # UNet size
-        transforms.ToTensor()])
+        transforms.Resize((256, 256), # UNet size
+                          interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
+        transforms.ToTensor()]) 
 
     # load train ds 
     trainset = OxfordIIITPetTrainDataset(root=args.dataset_path, 
