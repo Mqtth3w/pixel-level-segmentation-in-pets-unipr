@@ -17,7 +17,7 @@ echo  #OMP_NUM_THREADS : $OMP_NUM_THREADS
 
 module load miniconda3
 source "$CONDA_PREFIX/etc/profile.d/conda.sh"
-conda activate stylegan
+conda activate mqtth3w
 
 # Adam, dice loss
 python ./unet/main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
@@ -37,7 +37,7 @@ python ./unet/main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti
 # RSMprop, dice loss
 python ./unet/main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name RSMprop --model_mame UNet_Adam_dice_lr_1_e5 --opt RSMprop
+--run_name RSMprop --model_mame UNet_RSMprop_dice_lr_1_e5 --opt RSMprop
 
 # RSMprop, BCE loss
 python ./unet/main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
