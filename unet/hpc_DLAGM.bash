@@ -7,6 +7,8 @@
 #SBATCH --mem=32gb
 #SBATCH --ntasks-per-node 10
 
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=matteo.gianvenuti@studenti.unipr.it
 
 # Charge resources to account   
 #SBATCH --account t_2024_dlagm
