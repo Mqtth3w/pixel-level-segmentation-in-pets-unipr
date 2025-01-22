@@ -7,7 +7,7 @@ import torch
 import torch.optim as optim
 import torch.nn as nn
 import os
-
+import time
 from tqdm import tqdm
 from model import Net
 
@@ -95,8 +95,13 @@ class Solver(object):
         # for early stopping 
         bad_epochs_ctr = 0
 
+        # save training/validation time
+        tot_time = 0.0
+
         self.net.train()
         for epoch in range(self.epochs):  # loop over the dataset multiple times
+            # epoch time
+            start = time.time()
             # epoch loss
             running_loss = 0.0
             loop = tqdm(enumerate(self.train_loader), total = len(self.train_loader), leave = False)
@@ -121,13 +126,22 @@ class Solver(object):
                 loop.set_postfix(loss=loss.item())
 
             # epoch finished, print statistics
-            self.writer.add_scalar('training loss',
+            self.writer.add_scalar('Training loss',
                     running_loss / len(self.train_loader),
                     epoch * len(self.train_loader))
             print(f"Epoch {epoch+1}, training loss {running_loss / len(self.train_loader)}")
 
             # test the model (for each epoch it's more regular and standard than with print_every)
             iou, l1_distance = self.test(epoch+1)
+
+            # time statistics
+            end = time.time()
+            print(f"Took {((end - start) / 60):.4f} minutes for epoch {epoch}")
+            tot_time += end - start
+            self.writer.add_scalar('Epoch time',
+                    (end - start) / 60,
+                    epoch * len(self.train_loader))
+
             #self.save_model()
             # save only the best model 
             if iou > best_iou or (iou == best_iou and l1_distance < best_l1_distance):
@@ -144,6 +158,9 @@ class Solver(object):
                 self.writer.add_text('Info early stopping ', f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
                 print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
                 break
+        
+        print(f"Took {(tot_time / 60):.4f} minutes for trainvaltest")
+        self.writer.add_text('Total time', f"{tot_time / 60}")
 
         self.writer.flush()
         self.writer.close()
@@ -185,7 +202,7 @@ class Solver(object):
         avg_iou = tot_iou / num_batches
         avg_l1_distance = tot_l1_distance / num_batches
 
-        self.writer.add_scalar('test loss (avg on test)', 
+        self.writer.add_scalar('Test loss (avg on test)', 
                                avg_test_loss, epoch * num_batches)
         self.writer.add_scalar('IoU (avg on test)', 
                                avg_iou, epoch * num_batches)
