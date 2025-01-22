@@ -49,11 +49,11 @@ class Solver(object):
         
         # define Loss function
         if self.args.loss == "dice": # it's similar to IoU but faster in convergence and more stable
-            self.criterion = dc_loss() # focus on overlap btween pred mask and ground truth
+            self.criterion = dc_loss # focus on overlap btween pred mask and ground truth
         elif self.args.loss == "BCE": # the model already contain the sigmoid ([0, 1] values needed)
             self.criterion = nn.BCELoss() # measure the entropy btween pred mask and ground truth
         elif self.args.loss == "combo": # I saw this from milesial/Pytorch-UNet and I wanted to try it
-            self.criterion = dc_bce_loss()
+            self.criterion = dc_bce_loss
 
         # choose optimizer 
         if self.args.opt == "Adam": # more adaptive (faster convergence) and robust (e.g., bad initial lr)

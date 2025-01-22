@@ -29,7 +29,7 @@ def get_args():
     parser.add_argument('--patience', type=float, default=5, help='Patience for early stopping')
     #parser.add_argument('--patience2', type=float, default=3, help='Patience used by the scheduler to reduce the lr')
     parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for bad gradient cases (e.g., flat zone)')
-    parser.add_argument('--weight_deacy', type=float, default=1e-8, help='Weight decay for L2 regularization')
+    parser.add_argument('--weight_decay', type=float, default=1e-8, help='Weight decay for optimizer (L2 regularization)')
     #parser.add_argument('--use_norm', action='store_true', help='Use normalization layers in model')
     #parser.add_argument('--feat', type=int, default=16, help='Number of features in model')
 
