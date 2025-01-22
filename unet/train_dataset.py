@@ -15,7 +15,7 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
         super().__init__(root, split=split, target_types=target_types, 
                          download=download)
 
-    def transform(self, image, mask):
+    def custom_transforms(self, image, mask):
         # resize
         img_resize = transforms.Resize((256, 256), # UNet size
                                        interpolation=transforms.InterpolationMode.BICUBIC) # to have higher quality than bilinear
@@ -44,7 +44,7 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
     def __getitem__(self, index):
         image, mask = super().__getitem__(index)
 
-        # apply custom transformations to both image and mask
-        image, mask = self.transform(image, mask)
+        # apply custom transforms to both image and mask
+        image, mask = self.custom_transforms(image, mask)
 
         return image, mask
