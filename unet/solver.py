@@ -24,12 +24,12 @@ def dc_loss(pred, target):
     predf = pred.view(-1)
     targetf = target.view(-1)
     intersection = (predf * targetf).sum()
-    dice = 1 - ((2. * intersection + smooth) /
-              (predf.sum() + targetf.sum() + smooth))
-    return dice.mean() # the mean make it more stable
+    return 1 - ((2. * intersection + smooth) /
+              (predf.sum() + targetf.sum() + smooth)) 
 
 def dc_bce_loss(pred, target):
-    return nn.BCEloss(pred, target) + dc_loss(pred, target)
+    bceloss = nn.BCEloss()
+    return bceloss(pred, target) + dc_loss(pred, target)
 
 class Solver(object):
     """Solver for training and testing."""
