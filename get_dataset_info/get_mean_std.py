@@ -31,6 +31,11 @@ std /= len(dataset)
 
 print(f"Mean: {mean}")
 print(f"Std: {std}")
+
+# IMPORTANT
+# I tried to train the net on these normalization values, but they are too small so the imgs became really compressed and not understandable for the model
+# So I decided to use the mean and norm of ImageNet bc they are calculated on millions of images (mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
+# I alwasy used normalized images for the model because we saw in lab that the model perform a lot better with it than without
 '''
 # BILINEAR
 #trainval
@@ -46,6 +51,4 @@ Std: tensor([0.0042, 0.0041, 0.0042])
 #test
 Mean: tensor([0.0077, 0.0072, 0.0063])
 Std: tensor([0.0042, 0.0041, 0.0043])
-
-# normalization -> mean 0, std 1
 '''
