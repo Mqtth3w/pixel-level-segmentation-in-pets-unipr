@@ -51,7 +51,7 @@ def main(args):
                           interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))])
-    # check the "get_mean_std.py" script for more details about the normalization
+    # check the "get_dataset_info/get_mean_std.py" script for more details about the normalization
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256), # UNet size
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels

@@ -66,8 +66,8 @@ class Solver(object):
             self.optimizer = optim.SGD(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay,
                                        momentum=self.args.momentum, foreach=True)
         
-        # scheduler to reduce lr during the trainig for better convergence, and to reach the specified goal
-        self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'max', patience=self.args.patience2) # goal: maximize the IoU
+        # scheduler to change lr during the trainig for better convergence, and to maximize the IoU
+        self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'max', patience=self.args.patience2) 
 
         self.epochs = self.args.epochs
         self.train_loader = train_loader
@@ -115,8 +115,8 @@ class Solver(object):
                 masks = masks.to(self.device) # the ground truth mask
 
                 # zero the parameter gradients
-                # forward + backward + optimize
                 self.net.zero_grad()
+                # forward + backward + optimize
                 preds = self.net(imgs)
                 loss = self.criterion(preds, masks)
                 loss.backward()
@@ -135,7 +135,7 @@ class Solver(object):
             # test the model (for each epoch it's more regular and standard than with print_every)
             iou, l1_distance = self.test(epoch+1)
 
-            # maximize goal
+            # maximize goal with lr variations
             self.scheduler.step(iou)
 
             # time statistics
