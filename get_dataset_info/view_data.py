@@ -23,9 +23,9 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
 
     def custom_transforms(self, image, mask):
         # resize
-        img_resize = transforms.Resize((256, 256), # UNet size
+        img_resize = transforms.Resize((256, 256),
                                        interpolation=transforms.InterpolationMode.BICUBIC) # to have higher quality than bilinear
-        mask_resize = transforms.Resize((256, 256), # UNet size
+        mask_resize = transforms.Resize((256, 256),
                                        interpolation=transforms.InterpolationMode.NEAREST) # other interpolations may lead to incorrect labels
         image = img_resize(image)
         mask = mask_resize(mask)
@@ -57,12 +57,12 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
 
 
 img_transform = transforms.Compose([
-    transforms.Resize((256, 256), # UNet size
+    transforms.Resize((256, 256),
                       interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
     transforms.ToTensor()])
 
 mask_transform = transforms.Compose([
-    transforms.Resize((256, 256), # UNet size
+    transforms.Resize((256, 256),
                       interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
     transforms.ToTensor()])
 

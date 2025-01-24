@@ -9,7 +9,7 @@ from torch.utils.data import DataLoader
 
 # define a transform to only convert to Tensor (no normalization yet)
 transform = transforms.Compose([
-    transforms.Resize((256, 256), # UNet size
+    transforms.Resize((256, 256),
                       interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
     transforms.ToTensor()])
 
