@@ -28,8 +28,8 @@ def dc_loss(pred, target):
               (predf.sum() + targetf.sum() + smooth)) 
 
 def dc_bce_loss(pred, target):
-    bceloss = nn.BCELoss()
-    return bceloss(pred, target) + dc_loss(pred, target)
+    bce_loss = nn.BCELoss()
+    return bce_loss(pred, target) + dc_loss(pred, target)
 
 class Solver(object):
     """Solver for training and testing."""
