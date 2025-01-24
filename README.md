@@ -13,7 +13,7 @@
 -	Experiment also with in-the-wild samples (meaning images not extracted from the pets dataset: e.g. found online or taken by a smartphone). Does the network perform well over these images?
 -	That happens if more than on animal is in one image? How does the model perform?
 
-## Nets I decided to train and test
+## Nets I decided to train/finetune and test
 - UNet (required)
 - DeepLabV3
 - FCN
