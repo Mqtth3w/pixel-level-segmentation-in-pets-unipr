@@ -45,15 +45,15 @@ def main(args):
 
     # define transforms
     # train transforms are already defined inside the custom train dataset
-
+    # I decide to use the size 256x256 for UNet to have a manageable training time
     img_test_transform = transforms.Compose([
-        transforms.Resize((256, 256), # UNet size
+        transforms.Resize((256, 256),
                           interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))])
     # check the "get_dataset_info/get_mean_std.py" script for more details about the normalization
     mask_test_transform = transforms.Compose([
-        transforms.Resize((256, 256), # UNet size
+        transforms.Resize((256, 256),
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
         transforms.ToTensor()]) 
 

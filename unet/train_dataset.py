@@ -11,15 +11,17 @@ import torchvision.transforms.functional as TF
 class OxfordIIITPetTrainDataset(OxfordIIITPet):
     """A custom dataset to apply the same random horizontal flip to img and mask."""
     def __init__(self, root, split='trainval', target_types='segmentation', 
-                 download=False):
+                 download=False, resize_dim=(256, 256)):
         super().__init__(root, split=split, target_types=target_types, 
                          download=download)
+        
+        self.resize_dim = resize_dim
 
     def custom_transforms(self, image, mask):
         # resize
-        img_resize = transforms.Resize((256, 256), # UNet size
+        img_resize = transforms.Resize(self.resize_dim,
                                        interpolation=transforms.InterpolationMode.BICUBIC) # to have higher quality than bilinear
-        mask_resize = transforms.Resize((256, 256), # UNet size
+        mask_resize = transforms.Resize(self.resize_dim,
                                        interpolation=transforms.InterpolationMode.NEAREST) # other interpolations may lead to incorrect labels
         image = img_resize(image)
         mask = mask_resize(mask)
