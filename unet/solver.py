@@ -66,7 +66,8 @@ class Solver(object):
             self.optimizer = optim.SGD(self.net.parameters(), lr=self.args.lr, weight_decay=self.args.weight_decay,
                                        momentum=self.args.momentum, foreach=True)
         
-        # scheduler to reduce lr during the trainig for better convergence ?? not really necessary with Adam
+        # scheduler to reduce lr during the trainig for better convergence, and to reach the specified goal
+        self.scheduler = optim.lr_scheduler.ReduceLROnPlateau(self.optimizer, 'max', patience=self.args.patience2) # goal: maximize the IoU
 
         self.epochs = self.args.epochs
         self.train_loader = train_loader
@@ -133,6 +134,9 @@ class Solver(object):
 
             # test the model (for each epoch it's more regular and standard than with print_every)
             iou, l1_distance = self.test(epoch+1)
+
+            # maximize goal
+            self.scheduler.step(iou)
 
             # time statistics
             end = time.time()
