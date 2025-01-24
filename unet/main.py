@@ -18,15 +18,15 @@ def get_args():
     parser.add_argument('--run_name', type=str, default="run_1", help='Name of current run')
     parser.add_argument('--model_name', type=str, default="first_train", help='Name of the model to be saved/loaded')
 
-    parser.add_argument('--epochs', type=int, default=35, help='Number of epochs')
+    parser.add_argument('--epochs', type=int, default=50, help='Number of epochs')
     parser.add_argument('--batch_size', type=int, default=32, help='Number of elements in batch size')
     parser.add_argument('--workers', type=int, default=2, help='Number of workers in data loader')
     #parser.add_argument('--print_every', type=int, default=500, help='Print losses every N iteration.')
 
-    parser.add_argument('--lr', type=float, default=1e-5, help='Learning rate.')
+    parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate.')
     parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'Optimizer used for training')
     parser.add_argument('--loss', type=str, default='dice', choices=['BCE', 'dice', 'combo'], help = 'Loss function used for training')
-    parser.add_argument('--patience', type=float, default=5, help='Patience for early stopping')
+    parser.add_argument('--patience', type=float, default=5, help='Patience for early stopping') 
     #parser.add_argument('--patience2', type=float, default=3, help='Patience used by the scheduler to reduce the lr')
     parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for bad gradient cases (e.g., flat zone)')
     parser.add_argument('--weight_decay', type=float, default=1e-8, help='Weight decay for optimizer (L2 regularization)')
@@ -50,8 +50,8 @@ def main(args):
         transforms.Resize((256, 256), # UNet size
                           interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
         transforms.ToTensor(),
-        transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), std=(0.0042, 0.0041, 0.0042))])
-    # custom normalization, the values were calculated with the "get_mean_std.py" script
+        transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))])
+    # check the "get_mean_std.py" script for more details about the normalization
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256), # UNet size
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels

@@ -34,9 +34,8 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
         mask = TF.to_tensor(mask)
 
         # normalize the img only
-        normalize = transforms.Normalize(mean=(0.0075, 0.0070, 0.0062), 
-                                         std=(0.0042, 0.0041, 0.0042))
-        # custom normalization, the values were calculated with the "get_mean_std.py" script
+        normalize = transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
+        # check the "get_mean_std.py" script for more details about the normalization
         image = normalize(image)
 
         return image, mask
