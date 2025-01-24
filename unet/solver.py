@@ -154,10 +154,11 @@ class Solver(object):
                 bad_epochs_ctr += 1
 
             # early stopping
-            if bad_epochs_ctr >= self.args.patience:
-                self.writer.add_text('Info early stopping ', f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
-                print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
-                break
+            if epoch > 10:
+                if bad_epochs_ctr >= self.args.patience:
+                    self.writer.add_text('Info early stopping ', f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
+                    print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
+                    break
         
         print(f"Took {(tot_time / 60):.4f} minutes for trainvaltest")
         self.writer.add_text('Total time', f"{tot_time / 60}")
