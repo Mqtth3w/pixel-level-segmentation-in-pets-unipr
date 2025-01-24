@@ -13,14 +13,14 @@ from model import Net
 
 # Define loss/help functions
 def iou(pred, target):
-    smooth = 1e-7 # avoid zero division
+    smooth = 1e-6 # avoid zero division
     intersection = (pred * target).sum()
     union = pred.sum() + target.sum() - intersection
     iou = (intersection + smooth) / (union + smooth)
     return iou
 
 def dc_loss(pred, target):
-    smooth = 1e-7 # avoid zero division
+    smooth = 1e-6 # avoid zero division
     predf = pred.view(-1)
     targetf = target.view(-1)
     intersection = (predf * targetf).sum()
@@ -28,7 +28,7 @@ def dc_loss(pred, target):
               (predf.sum() + targetf.sum() + smooth)) 
 
 def dc_bce_loss(pred, target):
-    bceloss = nn.BCEloss()
+    bceloss = nn.BCELoss()
     return bceloss(pred, target) + dc_loss(pred, target)
 
 class Solver(object):
