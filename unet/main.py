@@ -7,6 +7,7 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import argparse
+import numpy as np
 from torch.utils.tensorboard import SummaryWriter
 
 from solver import Solver
@@ -55,7 +56,8 @@ def main(args):
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256),
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
-        transforms.ToTensor()]) 
+        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask), dtype=torch.int64))])
+        # it is like ToTensor() but without [0, 1] normalization
 
     # load train ds 
     trainset = OxfordIIITPetTrainDataset(root=args.dataset_path, 

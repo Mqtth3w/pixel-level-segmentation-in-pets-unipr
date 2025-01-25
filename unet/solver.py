@@ -14,21 +14,29 @@ from model import Net
 # Define loss/help functions
 def iou(pred, target):
     smooth = 1e-4 # avoid zero division
-    intersection = (pred * target).sum()
-    union = pred.sum() + target.sum() - intersection
+    # pred is [B, 3, H, W] and target is [B, 1, H, W]
+    # so one hot encoding fo the mask is necessary
+    
+    # with the sum dim=(1, 2, 3) it will consider each img separately 
+    # so each image will equally contribute
+    intersection = (pred * target).sum(dim=(1, 2, 3))
+    union = pred.sum(dim=(1, 2, 3)) + target.sum(dim=(1, 2, 3)) - intersection
     iou = (intersection + smooth) / (union + smooth)
-    return iou
+    return iou.mean()
 
 def dc_loss(pred, target):
     smooth = 1e-4 # avoid zero division
-    predf = pred.view(-1)
-    targetf = target.view(-1)
-    intersection = (predf * targetf).sum()
+    # the same idea used in iou is applied here
+    
+    predf = pred.view(pred.size(0), -1)
+    targetf = target.view(target.size(0), -1)
+    intersection = (predf * targetf).sum(dim=1)
     return 1 - ((2. * intersection + smooth) /
-              (predf.sum() + targetf.sum() + smooth)) 
+              (predf.sum(dim=1) + targetf.sum(dim=1) + smooth)).mean() 
 
 def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
+    
     return ce_loss(pred, target) + dc_loss(pred, target)
 
 class Solver(object):

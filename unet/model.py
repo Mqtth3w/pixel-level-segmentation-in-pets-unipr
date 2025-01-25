@@ -39,7 +39,7 @@ class Net(nn.Module):
         self.up_conv_4 = conv_layer(128, 64)
         # three classes as the Oxford IIIT Pet dataset (each mask have the background, the pet edge and the pet itself)
         self.output = nn.Conv2d(in_channels=64, out_channels=3, kernel_size=1, padding=0)
-        self.output_activation = nn.Softmax(dim=1) # [B, C, H, W] # 1 is C, the class
+        self.output_activation = nn.Softmax(dim=1) # [B, C, H, W] 
            
     def forward(self, img):     # The print statements can be used to visualize the input and output sizes for debugging
         x1 = self.down_1(img) #256x256
