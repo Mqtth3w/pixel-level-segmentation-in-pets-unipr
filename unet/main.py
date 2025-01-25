@@ -34,7 +34,7 @@ def get_args():
     #parser.add_argument('--use_norm', action='store_true', help='Use normalization layers in model')
     #parser.add_argument('--feat', type=int, default=16, help='Number of features in model')
 
-    parser.add_argument('--dataset_path', type=str, default='../', help='Path were to save/get the dataset')
+    parser.add_argument('--dataset_path', type=str, default='./', help='Path were to save/get the dataset')
     parser.add_argument('--checkpoint_path', type=str, default='./', help='Path were to save the trained model')
 
     parser.add_argument('--resume_train', action='store_true', help='Load the model from checkpoint before training')
@@ -56,7 +56,7 @@ def main(args):
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256),
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
-        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask), dtype=torch.float32))])
+        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask), dtype=torch.long))])
         # it is like ToTensor() but without [0, 1] normalization
 
     # load train ds 

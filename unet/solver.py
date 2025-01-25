@@ -14,11 +14,13 @@ from model import Net
 # Define loss/help functions
 def iou(pred, target):
     smooth = 1e-4 # avoid zero division
-    # pred is [B, 3, H, W] and target is [B, 1, H, W] more properly [B, H, W]
+    # pred is [B, 3, H, W] and target is [B, H, W]
     # so one hot encoding fo the mask is necessary
     B, H, W = target.size()
     onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
-    target = onehot.scatter(1, target.unsqueeze(1), 1)
+    target = target.unsqueeze(1) - 1
+    # dataset labels [1, 2, 3], indexes needed [0, 1, 2]
+    target = onehot.scatter(1, target, 1)
     # with the sum dim=(1, 2, 3) it will consider each img separately 
     # so each img will equally contribute
     intersection = (pred * target).sum(dim=(1, 2, 3))
@@ -31,7 +33,8 @@ def dc_loss(pred, target):
     # the same idea used in iou is applied here
     B, H, W = target.size()
     onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
-    target = onehot.scatter(1, target.unsqueeze(1), 1)
+    target = target.unsqueeze(1) - 1
+    target = onehot.scatter(1, target, 1)
     #predf = pred.view(pred.size(0), -1)
     #targetf = target.view(target.size(0), -1)
     #intersection = (predf * targetf).sum(dim=1)
@@ -46,7 +49,8 @@ def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
     B, H, W = target.size()
     onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.long)
-    target2 = onehot.scatter(1, target.unsqueeze(1), 1)
+    target2 = target.unsqueeze(1) - 1
+    target2 = onehot.scatter(1, target2, 1)
     return ce_loss(pred, target2) + dc_loss(pred, target)
 
 class Solver(object):
@@ -129,8 +133,8 @@ class Solver(object):
                 loop.set_description(f"Epoch [{epoch+1}/{self.epochs}]")
 
                 # put data on correct device
-                imgs = imgs.to(self.device)
-                masks = masks.to(self.device) # the ground truth mask
+                imgs = imgs.to(device=self.device, dtype=torch.float32)
+                masks = masks.to(device=self.device, dtype=torch.long) # the ground truth mask
 
                 # zero the parameter gradients
                 self.net.zero_grad()
