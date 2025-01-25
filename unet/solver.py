@@ -13,23 +13,23 @@ from model import Net
 
 # Define loss/help functions
 def iou(pred, target):
-    smooth = 1e-6 # avoid zero division
+    smooth = 1e-4 # avoid zero division
     intersection = (pred * target).sum()
     union = pred.sum() + target.sum() - intersection
     iou = (intersection + smooth) / (union + smooth)
     return iou
 
 def dc_loss(pred, target):
-    smooth = 1e-6 # avoid zero division
+    smooth = 1e-4 # avoid zero division
     predf = pred.view(-1)
     targetf = target.view(-1)
     intersection = (predf * targetf).sum()
     return 1 - ((2. * intersection + smooth) /
               (predf.sum() + targetf.sum() + smooth)) 
 
-def dc_bce_loss(pred, target):
-    bce_loss = nn.BCELoss()
-    return bce_loss(pred, target) + dc_loss(pred, target)
+def dc_ce_loss(pred, target):
+    ce_loss = nn.CrossEntropyLoss()
+    return ce_loss(pred, target) + dc_loss(pred, target)
 
 class Solver(object):
     """Solver for training and testing."""
@@ -48,12 +48,12 @@ class Solver(object):
             self.load_model()
         
         # define Loss function
-        if self.args.loss == "dice": # it's similar to IoU but faster in convergence and more stable
+        if self.args.loss == "dice": # it should be similar to IoU but faster in convergence and more stable
             self.criterion = dc_loss # focus on overlap btween pred mask and ground truth
-        elif self.args.loss == "BCE": # the model already contain the sigmoid ([0, 1] values needed)
-            self.criterion = nn.BCELoss() # measure the entropy btween pred mask and ground truth
-        elif self.args.loss == "combo": # I saw this from milesial/Pytorch-UNet and I wanted to try it
-            self.criterion = dc_bce_loss
+        elif self.args.loss == "CE": # multi-class loss
+            self.criterion = nn.CrossEntropyLoss() 
+        elif self.args.loss == "combo": 
+            self.criterion = dc_ce_loss
 
         # choose optimizer 
         if self.args.opt == "Adam": # more adaptive (faster convergence) and robust (e.g., bad initial lr)

@@ -20,35 +20,32 @@ echo  #OMP_NUM_THREADS : $OMP_NUM_THREADS
 module load miniconda3
 source "$CONDA_PREFIX/etc/profile.d/conda.sh"
 conda activate mqtth3w
+ 
 
 # Adam, dice loss
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name UNet_Adam_dice_lr_1_e5 --model_name UNet_Adam_dice_lr_1_e5
-
-# Adam, BCE loss
+--run_name UNet_Adam_dice --model_name UNet_Adam_dice
+# Adam, CE loss
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name UNet_Adam_BCE_lr_1_e5 --model_name UNet_Adam_BCE_lr_1_e5 --loss BCE
-
+--run_name UNet_Adam_CE --model_name UNet_Adam_CE --loss CE
 # Adam, combo loss
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name UNet_Adam_combo_lr_1_e5 --model_name UNet_Adam_combo_lr_1_e5 --loss combo
-
+--run_name UNet_Adam_combo --model_name UNet_Adam_combo --loss combo
 # RSMprop, dice loss
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name UNet_RSMprop_dice_lr_1_e5 --model_name UNet_RSMprop_dice_lr_1_e5 --opt RSMprop
-
-# RSMprop, BCE loss
+--run_name UNet_RSMprop_dice --model_name UNet_RSMprop_dice --opt RSMprop
+# RSMprop, CE loss
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name UNet_RSMprop_BCE_lr_1_e5 --model_name UNet_RSMprop_BCE_lr_1_e5 --opt RSMprop --loss BCE
-
+--run_name UNet_RSMprop_CE --model_name UNet_RSMprop_CE --opt RSMprop --loss CE
 # RSMprop, combo loss
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name UNet_RSMprop_combo_lr_1_e5 --model_name UNet_RSMprop_combo_lr_1_e5 --opt RSMprop --loss combo
+--run_name UNet_RSMprop_combo --model_name UNet_RSMprop_combo --opt RSMprop --loss combo
+
 
 conda deactivate
