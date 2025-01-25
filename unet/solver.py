@@ -48,7 +48,7 @@ def dc_loss(pred, target):
 def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
     B, H, W = target.size()
-    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.long)
+    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
     target2 = target.unsqueeze(1) - 1
     target2 = onehot.scatter(1, target2, 1)
     return ce_loss(pred, target2) + dc_loss(pred, target)
