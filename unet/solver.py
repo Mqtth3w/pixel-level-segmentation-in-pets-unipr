@@ -133,8 +133,8 @@ class Solver(object):
                 loop.set_description(f"Epoch [{epoch+1}/{self.epochs}]")
 
                 # put data on correct device
-                imgs = imgs.to(device=self.device, dtype=torch.float32)
-                masks = masks.to(device=self.device, dtype=torch.long) # the ground truth mask
+                imgs = imgs.to(self.device)
+                masks = masks.to(self.device) # the ground truth mask
 
                 # zero the parameter gradients
                 self.net.zero_grad()
