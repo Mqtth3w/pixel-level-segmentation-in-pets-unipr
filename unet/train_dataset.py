@@ -35,7 +35,7 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
 
         # transform to tensor
         image = TF.to_tensor(image)
-        mask = TF.to_tensor(np.array(mask), dtype=torch.int64) # tensor without [0, 1] normalization
+        mask = torch.tensor(np.array(mask), dtype=torch.int64) # tensor without [0, 1] normalization
 
         # normalize the image only
         normalize = transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
