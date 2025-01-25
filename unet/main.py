@@ -56,7 +56,7 @@ def main(args):
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256),
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
-        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask), dtype=torch.int64))])
+        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask), dtype=torch.float32))])
         # it is like ToTensor() but without [0, 1] normalization
 
     # load train ds 

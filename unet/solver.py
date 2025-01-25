@@ -16,7 +16,8 @@ def iou(pred, target):
     smooth = 1e-4 # avoid zero division
     # pred is [B, 3, H, W] and target is [B, 1, H, W]
     # so one hot encoding fo the mask is necessary
-    onehot = torch.zeros(target.size(0), 3, target.size(2), target.size(3))
+    B, _, H, W = target.size()
+    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
     target = onehot.scatter(1, target, 1)
     # with the sum dim=(1, 2, 3) it will consider each img separately 
     # so each img will equally contribute
@@ -28,17 +29,23 @@ def iou(pred, target):
 def dc_loss(pred, target):
     smooth = 1e-4 # avoid zero division
     # the same idea used in iou is applied here
-    onehot = torch.zeros(target.size(0), 3, target.size(2), target.size(3))
+    B, _, H, W = target.size()
+    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
     target = onehot.scatter(1, target, 1)
-    predf = pred.view(pred.size(0), -1)
-    targetf = target.view(target.size(0), -1)
-    intersection = (predf * targetf).sum(dim=1)
-    return 1 - ((2. * intersection + smooth) /
-              (predf.sum(dim=1) + targetf.sum(dim=1) + smooth)).mean() 
+    #predf = pred.view(pred.size(0), -1)
+    #targetf = target.view(target.size(0), -1)
+    #intersection = (predf * targetf).sum(dim=1)
+    #dice = ((2. * intersection + smooth) /
+              #(predf.sum(dim=1) + targetf.sum(dim=1) + smooth))
+    intersection = (pred * target).sum(dim=(1, 2, 3)) # this should use less memory
+    dice = ((2. * intersection + smooth) /
+              (pred.sum(dim=(1, 2, 3)) + target.sum(dim=(1, 2, 3)) + smooth))
+    return 1 - dice.mean() 
 
 def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
-    onehot = torch.zeros(target.size(0), 3, target.size(2), target.size(3))
+    B, _, H, W = target.size()
+    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
     target2 = onehot.scatter(1, target, 1)
     return ce_loss(pred, target2) + dc_loss(pred, target)
 
