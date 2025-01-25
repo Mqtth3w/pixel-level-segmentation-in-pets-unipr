@@ -56,8 +56,9 @@ def main(args):
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256),
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
-        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask), dtype=torch.long))])
+        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask)-1, dtype=torch.float32))])
         # it is like ToTensor() but without [0, 1] normalization
+        # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and <= num_classes
 
     # load train ds 
     trainset = OxfordIIITPetTrainDataset(root=args.dataset_path, 

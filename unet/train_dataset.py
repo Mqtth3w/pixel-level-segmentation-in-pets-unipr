@@ -41,8 +41,8 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
         normalize = transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
         # check the "get_dataset_info/get_mean_std.py" script for more details about the normalization
         image = normalize(image)
-
-        return image, mask
+        # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and <= num_classes
+        return image, mask-1
 
     def __getitem__(self, index):
         image, mask = super().__getitem__(index)
