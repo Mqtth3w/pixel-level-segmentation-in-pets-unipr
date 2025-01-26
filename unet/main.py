@@ -26,7 +26,7 @@ def get_args():
 
     parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate.')
     parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'Optimizer used for training')
-    parser.add_argument('--loss', type=str, default='dice', choices=['CE', 'dice', 'combo'], help = 'Loss function used for training')
+    parser.add_argument('--loss', type=str, default='CE', choices=['CE', 'dice', 'combo'], help = 'Loss function used for training')
     parser.add_argument('--patience', type=float, default=7, help='Patience for early stopping') 
     parser.add_argument('--patience2', type=float, default=5, help='Patience used by the scheduler to reduce the lr')
     parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for bad gradient cases (e.g., flat zone)')
@@ -56,7 +56,7 @@ def main(args):
     mask_test_transform = transforms.Compose([
         transforms.Resize((256, 256),
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
-        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask)-1, dtype=torch.float32))])
+        transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask)-1, dtype=torch.long))])
         # it is like ToTensor() but without [0, 1] normalization
         # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and <= num_classes
 

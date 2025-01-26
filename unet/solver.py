@@ -17,7 +17,7 @@ def iou(pred, target):
     # pred is [B, 3, H, W] and target is [B, H, W]
     # so one hot encoding fo the mask is necessary
     B, H, W = target.size()
-    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
+    onehot = torch.zeros(B, 3, H, W, device=target.device)
     target = target.unsqueeze(1)
     # dataset labels [1, 2, 3], indexes needed [0, 1, 2]
     target = onehot.scatter(1, target, 1)
@@ -32,7 +32,7 @@ def dc_loss(pred, target):
     smooth = 1e-4 # avoid zero division
     # the same idea used in iou is applied here
     B, H, W = target.size()
-    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
+    onehot = torch.zeros(B, 3, H, W, device=target.device)
     target = target.unsqueeze(1)
     target = onehot.scatter(1, target, 1)
     #predf = pred.view(pred.size(0), -1)
@@ -48,7 +48,7 @@ def dc_loss(pred, target):
 def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
     B, H, W = target.size()
-    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.float32)
+    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.long)
     target2 = target.unsqueeze(1)
     target2 = onehot.scatter(1, target2, 1)
     return ce_loss(pred, target2) + dc_loss(pred, target)
