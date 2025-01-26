@@ -6,7 +6,7 @@
 import torch
 import torch.optim as optim
 import torch.nn as nn
-import torch.nn.functional as F
+#import torch.nn.functional as F
 import os
 import time
 from tqdm import tqdm
@@ -17,7 +17,7 @@ def iou(pred, target):
     smooth = 1e-4 # avoid zero division
     # pred is [B, 3, H, W] and target is [B, H, W]
     # so one hot encoding fo the mask is necessary
-    target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
+    #target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
     #B, H, W = target.size()
     #onehot = torch.zeros(B, 3, H, W, device=target.device)
     #target = target.unsqueeze(1)
@@ -33,7 +33,7 @@ def iou(pred, target):
 def dc_loss(pred, target):
     smooth = 1e-4 # avoid zero division
     # the same idea used in iou is applied here
-    target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
+    #target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
     #B, H, W = target.size()
     #onehot = torch.zeros(B, 3, H, W, device=target.device)
     #target = target.unsqueeze(1)
@@ -51,12 +51,12 @@ def dc_loss(pred, target):
 
 def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
-    target2 = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
+    #target2 = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
     #B, H, W = target.size()
     #onehot = torch.zeros(B, 3, H, W, device=target.device)
     #target2 = target.unsqueeze(1)
     #target2 = onehot.scatter(1, target2, 1)
-    return ce_loss(pred, target2) + dc_loss(pred, target)
+    return ce_loss(pred, target) + dc_loss(pred, target)
 
 class Solver(object):
     """Solver for training and testing."""
@@ -225,6 +225,7 @@ class Solver(object):
                 # metrics!
                 tot_iou += iou(preds, masks)
 
+                #masks = F.one_hot(masks, 3).permute(0, 3, 1, 2).float()
                 l1_distance = torch.abs(preds - masks).mean()
                 tot_l1_distance += l1_distance.item()
 
