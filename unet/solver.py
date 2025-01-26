@@ -6,6 +6,7 @@
 import torch
 import torch.optim as optim
 import torch.nn as nn
+import torch.nn.functional as F
 import os
 import time
 from tqdm import tqdm
@@ -16,11 +17,12 @@ def iou(pred, target):
     smooth = 1e-4 # avoid zero division
     # pred is [B, 3, H, W] and target is [B, H, W]
     # so one hot encoding fo the mask is necessary
-    B, H, W = target.size()
-    onehot = torch.zeros(B, 3, H, W, device=target.device)
-    target = target.unsqueeze(1)
+    target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
+    #B, H, W = target.size()
+    #onehot = torch.zeros(B, 3, H, W, device=target.device)
+    #target = target.unsqueeze(1)
     # dataset labels [1, 2, 3], indexes needed [0, 1, 2]
-    target = onehot.scatter(1, target, 1)
+    #target = onehot.scatter(1, target, 1)
     # with the sum dim=(1, 2, 3) it will consider each img separately 
     # so each img will equally contribute
     intersection = (pred * target).sum(dim=(1, 2, 3))
@@ -31,10 +33,12 @@ def iou(pred, target):
 def dc_loss(pred, target):
     smooth = 1e-4 # avoid zero division
     # the same idea used in iou is applied here
-    B, H, W = target.size()
-    onehot = torch.zeros(B, 3, H, W, device=target.device)
-    target = target.unsqueeze(1)
-    target = onehot.scatter(1, target, 1)
+    target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
+    #B, H, W = target.size()
+    #onehot = torch.zeros(B, 3, H, W, device=target.device)
+    #target = target.unsqueeze(1)
+    #target = onehot.scatter(1, target, 1)
+
     #predf = pred.view(pred.size(0), -1)
     #targetf = target.view(target.size(0), -1)
     #intersection = (predf * targetf).sum(dim=1)
@@ -47,10 +51,11 @@ def dc_loss(pred, target):
 
 def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
-    B, H, W = target.size()
-    onehot = torch.zeros(B, 3, H, W, device=target.device, dtype=torch.long)
-    target2 = target.unsqueeze(1)
-    target2 = onehot.scatter(1, target2, 1)
+    target2 = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
+    #B, H, W = target.size()
+    #onehot = torch.zeros(B, 3, H, W, device=target.device)
+    #target2 = target.unsqueeze(1)
+    #target2 = onehot.scatter(1, target2, 1)
     return ce_loss(pred, target2) + dc_loss(pred, target)
 
 class Solver(object):

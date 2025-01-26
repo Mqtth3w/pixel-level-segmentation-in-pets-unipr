@@ -20,13 +20,14 @@ def get_args():
     parser.add_argument('--model_name', type=str, default="first_train", help='Name of the model to be saved/loaded')
 
     parser.add_argument('--epochs', type=int, default=50, help='Number of epochs')
-    parser.add_argument('--batch_size', type=int, default=32, help='Number of elements in batch size')
+    # batch size 32 got out of memory (request a100_80g:1 ?)
+    parser.add_argument('--batch_size', type=int, default=16, choices=[4, 8, 16], help='Number of elements in batch size')
     parser.add_argument('--workers', type=int, default=2, help='Number of workers in data loader')
     #parser.add_argument('--print_every', type=int, default=500, help='Print losses every N iteration.')
 
     parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate.')
     parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'Optimizer used for training')
-    parser.add_argument('--loss', type=str, default='CE', choices=['CE', 'dice', 'combo'], help = 'Loss function used for training')
+    parser.add_argument('--loss', type=str, default='dice', choices=['CE', 'dice', 'combo'], help = 'Loss function used for training')
     parser.add_argument('--patience', type=float, default=7, help='Patience for early stopping') 
     parser.add_argument('--patience2', type=float, default=5, help='Patience used by the scheduler to reduce the lr')
     parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for bad gradient cases (e.g., flat zone)')
