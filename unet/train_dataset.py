@@ -42,7 +42,6 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
         normalize = transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
         # check the "get_dataset_info/get_mean_std.py" script for more details about the normalization
         image = normalize(image)
-        mask = F.one_hot(mask, 3).permute(2, 0, 1).float()
         
         return image, mask
 
