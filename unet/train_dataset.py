@@ -36,15 +36,15 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
 
         # transform to tensor
         image = TF.to_tensor(image)
-        mask = torch.tensor(np.array(mask), dtype=torch.long) # tensor without [0, 1] normalization
-
+        mask = torch.tensor(np.array(mask-1), dtype=torch.long) # tensor without [0, 1] normalization
+        # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and <= num_classes
         # normalize the image only
         normalize = transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
         # check the "get_dataset_info/get_mean_std.py" script for more details about the normalization
         image = normalize(image)
         mask = F.one_hot(mask, 3).permute(0, 3, 1, 2).float()
-        # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and <= num_classes
-        return image, mask-1
+        
+        return image, mask
 
     def __getitem__(self, index):
         image, mask = super().__getitem__(index)
