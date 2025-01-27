@@ -18,11 +18,6 @@ def iou(pred, target):
     # pred is [B, 3, H, W] and target is [B, H, W]
     # so one hot encoding fo the mask is necessary
     target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
-    #B, H, W = target.size()
-    #onehot = torch.zeros(B, 3, H, W, device=target.device)
-    #target = target.unsqueeze(1)
-    # dataset labels [1, 2, 3], indexes needed [0, 1, 2]
-    #target = onehot.scatter(1, target, 1)
     # with the sum dim=(1, 2, 3) it will consider each img separately 
     # so each img will equally contribute
     intersection = (pred * target).sum(dim=(1, 2, 3))
@@ -34,17 +29,7 @@ def dc_loss(pred, target):
     smooth = 1e-4 # avoid zero division
     # the same idea used in iou is applied here
     target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
-    #B, H, W = target.size()
-    #onehot = torch.zeros(B, 3, H, W, device=target.device)
-    #target = target.unsqueeze(1)
-    #target = onehot.scatter(1, target, 1)
-
-    #predf = pred.view(pred.size(0), -1)
-    #targetf = target.view(target.size(0), -1)
-    #intersection = (predf * targetf).sum(dim=1)
-    #dice = ((2. * intersection + smooth) /
-              #(predf.sum(dim=1) + targetf.sum(dim=1) + smooth))
-    intersection = (pred * target).sum(dim=(1, 2, 3)) # this should use less memory
+    intersection = (pred * target).sum(dim=(1, 2, 3)) # this should use less memory than flattening
     dice = ((2. * intersection + smooth) /
               (pred.sum(dim=(1, 2, 3)) + target.sum(dim=(1, 2, 3)) + smooth))
     return 1 - dice.mean() 
@@ -52,10 +37,6 @@ def dc_loss(pred, target):
 def dc_ce_loss(pred, target):
     ce_loss = nn.CrossEntropyLoss()
     target2 = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
-    #B, H, W = target.size()
-    #onehot = torch.zeros(B, 3, H, W, device=target.device)
-    #target2 = target.unsqueeze(1)
-    #target2 = onehot.scatter(1, target2, 1)
     return ce_loss(pred, target2) + dc_loss(pred, target)
 
 class Solver(object):
@@ -77,7 +58,7 @@ class Solver(object):
         # define Loss function
         if self.args.loss == "dice": # it should be similar to IoU but faster in convergence and more stable
             self.criterion = dc_loss # focus on overlap btween pred mask and ground truth
-        elif self.args.loss == "CE": # multi-class loss
+        elif self.args.loss == "CE": # multi-class loss (background, pet edge, pet)
             self.criterion = nn.CrossEntropyLoss() 
         elif self.args.loss == "combo": 
             self.criterion = dc_ce_loss
@@ -179,6 +160,7 @@ class Solver(object):
                 best_iou = iou
                 best_l1_distance = l1_distance
                 self.save_model()
+                bad_epochs_ctr = 0
                 self.writer.add_text('Info best model', f"New best model saved with IoU {best_iou:.4f}, L1 distance {best_l1_distance:.4f}")
                 print(f"New best model saved with IoU {best_iou:.4f}, L1 distance {best_l1_distance:.4f}")
             else:

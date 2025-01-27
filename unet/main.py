@@ -8,7 +8,6 @@ import torchvision
 import torchvision.transforms as transforms
 import argparse
 import numpy as np
-import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
 
 from solver import Solver
@@ -21,20 +20,18 @@ def get_args():
     parser.add_argument('--model_name', type=str, default="first_train", help='Name of the model to be saved/loaded')
 
     parser.add_argument('--epochs', type=int, default=50, help='Number of epochs')
-    # batch size 32 got out of memory (request a100_80g:1 ?)
-    parser.add_argument('--batch_size', type=int, default=16, choices=[4, 8, 16], help='Number of elements in batch size')
+    parser.add_argument('--batch_size', type=int, default=16, choices=[4, 8, 16, 32], help='Number of elements in batch size')
     parser.add_argument('--workers', type=int, default=2, help='Number of workers in data loader')
     #parser.add_argument('--print_every', type=int, default=500, help='Print losses every N iteration.')
 
-    parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate.')
+    parser.add_argument('--lr', type=float, default=1e-4, help='Learning rate')
     parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'Optimizer used for training')
-    parser.add_argument('--loss', type=str, default='dice', choices=['CE', 'dice', 'combo'], help = 'Loss function used for training')
-    parser.add_argument('--patience', type=float, default=7, help='Patience for early stopping') 
+    parser.add_argument('--loss', type=str, default='dice', choices=['dice', 'CE', 'combo'], help = 'Loss function used for training')
+    parser.add_argument('--patience', type=float, default=6, help='Patience for early stopping')
     parser.add_argument('--patience2', type=float, default=5, help='Patience used by the scheduler to reduce the lr')
     parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for bad gradient cases (e.g., flat zone)')
     parser.add_argument('--weight_decay', type=float, default=1e-8, help='Weight decay for optimizer (L2 regularization)')
-    #parser.add_argument('--use_norm', action='store_true', help='Use normalization layers in model')
-    #parser.add_argument('--feat', type=int, default=16, help='Number of features in model')
+    parser.add_argument('--dropout', type=float, default=0.2, help='Dropout probability for the conv layers in the model')
 
     parser.add_argument('--dataset_path', type=str, default='./', help='Path were to save/get the dataset')
     parser.add_argument('--checkpoint_path', type=str, default='./', help='Path were to save the trained model')
@@ -60,7 +57,7 @@ def main(args):
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
         transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask)-1, dtype=torch.long))])
         # it is like ToTensor() but without [0, 1] normalization
-        # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and <= num_classes
+        # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and < num_classes
 
     # load train ds 
     trainset = OxfordIIITPetTrainDataset(root=args.dataset_path, 
