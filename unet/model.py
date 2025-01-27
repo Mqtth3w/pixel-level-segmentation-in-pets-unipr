@@ -8,13 +8,14 @@
 import torch
 import torch.nn as nn
 
-def conv_layer(input_channels, output_channels, dropout_p): # This is a helper function to create the convolutional blocks
+def conv_layer(input_channels, output_channels, dropout_probability): # This is a helper function to create the convolutional blocks
     conv = nn.Sequential(
         nn.Conv2d(input_channels, output_channels, kernel_size=3, padding=1),
         nn.ReLU(),
         nn.Conv2d(output_channels, output_channels, kernel_size=3, padding=1),
         nn.BatchNorm2d(output_channels),
-        nn.ReLU()
+        nn.ReLU(),
+        nn.Dropout(p=dropout_probability)
     )
     return conv
 

@@ -33,6 +33,11 @@ class OxfordIIITPetTrainDataset(OxfordIIITPet):
             image = TF.hflip(image)
             mask = TF.hflip(mask)
 
+        # random color jitter keeping a realistic image (little variation)
+        if random.random() > 0.5:
+            image = transforms.ColorJitter(brightness=0.1, contrast=0.1, 
+                                           saturation=0.1, hue=0.05)(image)
+
         # transform to tensor
         image = TF.to_tensor(image)
         mask = torch.tensor(np.array(mask)-1, dtype=torch.long) # tensor without [0, 1] normalization
