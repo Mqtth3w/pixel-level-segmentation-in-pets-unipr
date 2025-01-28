@@ -148,7 +148,7 @@ class Solver(object):
 
             # time statistics
             end = time.time()
-            print(f"Took {((end - start) / 60):.4f} minutes for epoch {epoch}")
+            print(f"Took {((end - start) / 60):.4f} minutes for epoch {epoch+1}")
             tot_time += end - start
             self.writer.add_scalar('Epoch time',
                     (end - start) / 60,
@@ -169,8 +169,8 @@ class Solver(object):
             # early stopping
             if epoch > 10:
                 if bad_epochs_ctr >= self.args.patience:
-                    self.writer.add_text('Info early stopping ', f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
-                    print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch + 1}")
+                    self.writer.add_text('Info early stopping ', f"Early stopping triggered with patience {self.args.patience} at epoch {epoch+1}")
+                    print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch+1}")
                     break
         
         print(f"Took {(tot_time / 60):.4f} minutes for trainvaltest")
