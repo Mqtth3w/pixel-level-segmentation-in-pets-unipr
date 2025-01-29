@@ -16,4 +16,16 @@
 ## Nets I decided to train/finetune and test
 - UNet (required)
 - DeepLabV3
-- FCN
+- FCN (?)
+
+## Best performances achieved
+
+| | Model | IoU | L1 distance | Download | |
+|-|-------------------|----------|--------|-------------|-|
+| | UNet | - | - | - | |
+| | DeepLabV3_ResNet101 | - | - | - | |
+| | - | - | - | - | |
+
+> [!NOTE]
+> These model were trained with A100 40GB GPU and data shuffle, so if you train them again you may obtain different results also depending on your hardware.
+> Of course there may be a better hyper-parameters configuration. This is not necessarily the best.
