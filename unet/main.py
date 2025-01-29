@@ -20,9 +20,10 @@ def get_args():
     parser.add_argument('--model_name', type=str, default="first_train", help='Name of the model to be saved/loaded')
 
     parser.add_argument('--epochs', type=int, default=50, help='Number of epochs')
-    parser.add_argument('--batch_size', type=int, default=16, choices=[4, 8, 16, 32], help='Number of elements in batch size')
+    parser.add_argument('--batch_size', type=int, default=32, choices=[8, 16, 32], help='Number of elements in batch size')
     parser.add_argument('--workers', type=int, default=2, help='Number of workers in data loader')
-    #parser.add_argument('--print_every', type=int, default=500, help='Print losses every N iteration.')
+
+    parser.add_argument('--img_resize', type=int, default=256, choices=[128, 256, 512], help='Image resize dimesions')
 
     parser.add_argument('--lr', type=float, default=2e-4, help='Learning rate')
     parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'Optimizer used for training')
@@ -47,24 +48,25 @@ def main(args):
     # train transforms are already defined inside the custom train dataset
     # I decide to use the size 256x256 for UNet to have a manageable training time
     img_test_transform = transforms.Compose([
-        transforms.Resize((256, 256),
+        transforms.Resize((args.img_resize, args.img_resize),
                           interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
         transforms.ToTensor(),
         transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))])
     # check the "get_dataset_info/get_mean_std.py" script for more details about the normalization
     mask_test_transform = transforms.Compose([
-        transforms.Resize((256, 256),
+        transforms.Resize((args.img_resize, args.img_resize),
                           interpolation=transforms.InterpolationMode.NEAREST), # other interpolations may lead to incorrect labels
         transforms.Lambda(lambda mask: torch.as_tensor(np.array(mask)-1, dtype=torch.long))])
         # it is like ToTensor() but without [0, 1] normalization
         # dataset classes [1, 2, 3], so the -1 is necessary to satisfy the constraint >= 0 and < num_classes
     transforms.RandomChoice([transforms.RandomEqualize(), transforms.ColorJitter()])
 
-    # load train ds 
+    # load train ds
     trainset = OxfordIIITPetTrainDataset(root=args.dataset_path, 
                                          split="trainval",
                                          target_types="segmentation", 
-                                         download=True)
+                                         download=True,
+                                         resize_dim=(args.img_resize, args.img_resize))
     trainloader = torch.utils.data.DataLoader(trainset, 
                                               batch_size=args.batch_size,
                                               shuffle=True, 
