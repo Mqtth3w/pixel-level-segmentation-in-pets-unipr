@@ -46,7 +46,6 @@ def main(args):
 
     # define transforms
     # train transforms are already defined inside the custom train dataset
-    # I decide to use the size 256x256 for UNet to have a manageable training time
     img_test_transform = transforms.Compose([
         transforms.Resize((args.img_resize, args.img_resize),
                           interpolation=transforms.InterpolationMode.BICUBIC),  # to have higher quality than bilinear
