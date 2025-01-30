@@ -118,4 +118,8 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
 --run_name UNet_lr7e_5 --model_name UNet_lr7e_5 --lr 7e-5
 
+# For this run the best performance was IoU 0.8293 and L1 distance 0.0649 
+# by UNet_lr7e_5 so it did not outperform the UNet_dr01_bs32_lr3e_4
+# best results saved in runs/best_res_3run.txt
+
 conda deactivate
