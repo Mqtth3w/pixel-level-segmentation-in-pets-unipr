@@ -24,10 +24,10 @@
 
 | | Model | IoU | L1 distance | Download | |
 |-|-------------------|----------|--------|-------------|-|
-| | UNet | - | - | - | |
+| | UNet | 0.8377 | 0.0615 | - | |
 | | DeepLabV3_ResNet101 | - | - | - | |
 | | - | - | - | - | |
 
 > [!NOTE]
 > These model were trained with A100 40GB GPU and data shuffle, so if you train them again you may obtain different results also depending on your hardware.
-> Of course there may be a better hyper-parameters configuration. This is not necessarily the best.
+> Of course there may be a better hyper-parameters configuration, this is not necessarily the best.
