@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --partition=gpu
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:a100_40g:3
+#SBATCH --gres=gpu:a100_40g:1
 #SBATCH --qos=gpu
 #SBATCH --time 23:59:59
 #SBATCH --mem=64gb
@@ -32,18 +32,18 @@ conda activate mqtth3w
 COMMENT
 
 # learning rate tests ("grid" search)
-# lr 1e-3
-python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
---checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name DeepLabV3ResNet_lr1e_3 --model_name DeepLabV3ResNet_lr1e_3 --lr 1e-3
-# lr 2e-3
-python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
---checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name DeepLabV3ResNet_lr2e_3 --model_name DeepLabV3ResNet_lr2e_3 --lr 2e-3
 # lr 2e-4
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
---run_name DeepLabV3ResNet_lr2e_4 --model_name DeepLabV3ResNet_lr2e_4
+--run_name DeepLabV3ResNet_lr2e_4 --model_name DeepLabV3ResNet_lr2e_4 --lr 2e-4
+# lr 3e-4
+python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
+--checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
+--run_name DeepLabV3ResNet_lr3e_4 --model_name DeepLabV3ResNet_lr3e_4
+# lr 4e-4
+python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
+--checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
+--run_name DeepLabV3ResNet_lr4e_4 --model_name DeepLabV3ResNet_lr4e_4 --lr 4e-4
 # lr 5e-4
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \

@@ -32,5 +32,6 @@ class Net(nn.Module):
         
     def forward(self, img):
         x = self.net(img)
+        x = x['out'] # extract the output tensor
         x = self.output_activation(x)
         return x
