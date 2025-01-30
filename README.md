@@ -22,11 +22,11 @@
 
 ## Best performances achieved
 
-| | Model | IoU | L1 distance | Download | |
-|-|-------------------|----------|--------|-------------|-|
-| | UNet | 0.8377 | 0.0615 | - | |
-| | DeepLabV3_ResNet101 | - | - | - | |
-| | - | - | - | - | |
+| | Model | Resolution | IoU | L1 distance | Download | |
+|-|-------------------|----------|----------|----------|----------|-|
+| | UNet | 256x256 | 0.8377 | 0.0615 | [weights](./unet/checkpoints/OxfordIIITPet_UNet_dr01_bs32_lr3e_4.pth) | |
+| | DeepLabV3_ResNet101 | - | - | - | - | |
+| | - | - | - | - | - | |
 
 > [!NOTE]
 > These models were trained with A100 40GB GPU and data shuffle, so if you train them again you may obtain different results also depending on your hardware.
