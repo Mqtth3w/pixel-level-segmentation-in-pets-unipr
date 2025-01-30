@@ -1,0 +1,50 @@
+# runs about optimizer and loss
+wn44
+
+Namespace(run_name='UNet_Adam_dice', model_name='UNet_Adam_dice', epochs=50, batch_size=16, workers=2, lr=0.0001, opt='Adam', loss='dice', patience=7, patience2=5, momentum=0.9, weight_decay=1e-08, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 20, training loss 0.09899373702380969
+Epoch 20, test data:
+Avg test Loss: 0.1055
+Avg IoU: 0.8165
+Avg L1 Distance: 0.0704
+
+Namespace(run_name='UNet_Adam_CE', model_name='UNet_Adam_CE', epochs=50, batch_size=16, workers=2, lr=0.0001, opt='Adam', loss='CE', patience=7, patience2=5, momentum=0.9, weight_decay=1e-08, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 18, training loss 0.6467963392319886
+Epoch 18, test data:
+Avg test Loss: 0.6530
+Avg IoU: 0.8116
+Avg L1 Distance: 0.0722
+
+Namespace(run_name='UNet_Adam_combo', model_name='UNet_Adam_combo', epochs=50, batch_size=16, workers=2, lr=0.0001, opt='Adam', loss='combo', patience=7, patience2=5, momentum=0.9, weight_decay=1e-08, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 16, training loss 0.7604553269303364
+Epoch 16, test data:
+Avg test Loss: 0.7725
+Avg IoU: 0.8063
+Avg L1 Distance: 0.0748
+
+Namespace(run_name='UNet_RSMprop_dice', model_name='UNet_RSMprop_dice', epochs=50, batch_size=16, workers=2, lr=0.0001, opt='RSMprop', loss='dice', patience=7, patience2=5, momentum=0.9, weight_decay=1e-08, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 30, training loss 0.10487760046254034
+Epoch 30, test data:
+Avg test Loss: 0.1064
+Avg IoU: 0.8152
+Avg L1 Distance: 0.0709
+
+Namespace(run_name='UNet_RSMprop_CE', model_name='UNet_RSMprop_CE', epochs=50, batch_size=16, workers=2, lr=0.0001, opt='RSMprop', loss='CE', patience=7, patience2=5, momentum=0.9, weight_decay=1e-08, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 22, training loss 0.6552759922069052
+Epoch 22, test data:
+Avg test Loss: 0.6571
+Avg IoU: 0.8041
+Avg L1 Distance: 0.0753
+
+Namespace(run_name='UNet_RSMprop_combo', model_name='UNet_RSMprop_combo', epochs=50, batch_size=16, workers=2, lr=0.0001, opt='RSMprop', loss='combo', patience=7, patience2=5, momentum=0.9, weight_decay=1e-08, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 17, training loss 0.8070265635200169
+Epoch 17, test data:
+Avg test Loss: 0.8047
+Avg IoU: 0.7809
+Avg L1 Distance: 0.0857

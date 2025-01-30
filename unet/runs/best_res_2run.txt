@@ -1,0 +1,50 @@
+# runs about dropout and batch size lr
+wn44
+
+Namespace(run_name='UNet_dr015_bs32_lr3e_4', model_name='UNet_dr015_bs32_lr3e_4', epochs=50, batch_size=32, workers=2, lr=0.0003, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.15, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 21, training loss 0.10173181865526282
+Epoch 21, test data:
+Avg test Loss: 0.1097
+Avg IoU: 0.8102
+Avg L1 Distance: 0.0731
+
+Namespace(run_name='UNet_dr01_bs32_lr3e_4', model_name='UNet_dr01_bs32_lr3e_4', epochs=50, batch_size=32, workers=2, lr=0.0003, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 48, training loss 0.07403787322666334
+Epoch 48, test data:
+Avg test Loss: 0.0922
+Avg IoU: 0.8377
+Avg L1 Distance: 0.0615
+
+Namespace(run_name='UNet_dr015_bs16_lr2e_4', model_name='UNet_dr015_bs16_lr2e_4', epochs=50, batch_size=16, workers=2, lr=0.0002, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.15, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 50, training loss 0.07468609732130299
+Epoch 50, test data:
+Avg test Loss: 0.0922
+Avg IoU: 0.8376
+Avg L1 Distance: 0.0615
+
+Namespace(run_name='UNet_dr01_bs16_lr2e_4', model_name='UNet_dr01_bs16_lr2e_4', epochs=50, batch_size=16, workers=2, lr=0.0002, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 28, training loss 0.09250665514365486
+Epoch 28, test data:
+Avg test Loss: 0.0971
+Avg IoU: 0.8295
+Avg L1 Distance: 0.0648
+
+Namespace(run_name='UNet_dr015_bs8_lr1e_4', model_name='UNet_dr015_bs8_lr1e_4', epochs=50, batch_size=8, workers=2, lr=0.0001, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.15, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 25, training loss 0.09553359954253487
+Epoch 25, test data:
+Avg test Loss: 0.1045
+Avg IoU: 0.8181
+Avg L1 Distance: 0.0697
+
+Namespace(run_name='UNet_dr01_bs8_lr1e_4', model_name='UNet_dr01_bs8_lr1e_4', epochs=50, batch_size=8, workers=2, lr=0.0001, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 23, training loss 0.09708128519680188
+Epoch 23, test data:
+Avg test Loss: 0.0988
+Avg IoU: 0.8270
+Avg L1 Distance: 0.0659
