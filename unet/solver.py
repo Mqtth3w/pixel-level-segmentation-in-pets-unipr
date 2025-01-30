@@ -148,7 +148,7 @@ class Solver(object):
 
             # time statistics
             end = time.time()
-            print(f"Took {((end - start) / 60):.4f} minutes for epoch {epoch+1}")
+            print(f"Took {((end - start) / 60):.4f} minutes for epoch {epoch+1}\n")
             tot_time += end - start
             self.writer.add_scalar('Epoch time',
                     (end - start) / 60,
@@ -162,7 +162,7 @@ class Solver(object):
                 self.save_model()
                 bad_epochs_ctr = 0
                 self.writer.add_text('Info best model', f"New best model saved with IoU {best_iou:.4f}, L1 distance {best_l1_distance:.4f}")
-                print(f"New best model saved with IoU {best_iou:.4f}, L1 distance {best_l1_distance:.4f}")
+                print(f"New best model saved with IoU {best_iou:.4f}, L1 distance {best_l1_distance:.4f}\n")
             else:
                 bad_epochs_ctr += 1
 
@@ -170,15 +170,15 @@ class Solver(object):
             if epoch > 10:
                 if bad_epochs_ctr >= self.args.patience:
                     self.writer.add_text('Info early stopping ', f"Early stopping triggered with patience {self.args.patience} at epoch {epoch+1}")
-                    print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch+1}")
+                    print(f"Early stopping triggered with patience {self.args.patience} at epoch {epoch+1}\n")
                     break
         
-        print(f"Took {(tot_time / 60):.4f} minutes for trainvaltest")
+        print(f"Took {(tot_time / 60):.4f} minutes for trainvaltest\n")
         self.writer.add_text('Total time', f"{tot_time / 60}")
 
         self.writer.flush()
         self.writer.close()
-        print("Finished Training")   
+        print("Finished Training\n")   
     
     def test(self, epoch):
         # now lets evaluate the model on the test set
@@ -227,6 +227,6 @@ class Solver(object):
         print(f"Epoch {epoch}, test data:")
         print(f"Avg test Loss: {avg_test_loss:.4f}")
         print(f"Avg IoU: {avg_iou:.4f}")
-        print(f"Avg L1 Distance: {avg_l1_distance:.4f}\n")
+        print(f"Avg L1 Distance: {avg_l1_distance:.4f}")
         self.net.train()
         return avg_iou, avg_l1_distance
