@@ -1,0 +1,41 @@
+wn45
+
+Namespace(run_name='DeepLabV3ResNet_lr2e_4', model_name='DeepLabV3ResNet_lr2e_4', epochs=50, batch_size=32, workers=2, img_resize=512, lr=0.0002, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 14, training loss 0.04427654121233069
+Epoch 14, test data:
+Avg test Loss: 0.0595
+Avg IoU: 0.8911
+Avg L1 Distance: 0.0396
+
+Namespace(run_name='DeepLabV3ResNet_lr3e_4', model_name='DeepLabV3ResNet_lr3e_4', epochs=50, batch_size=32, workers=2, img_resize=512, lr=0.0003, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 16, training loss 0.04211649739223978
+Epoch 16, test data:
+Avg test Loss: 0.0596
+Avg IoU: 0.8910
+Avg L1 Distance: 0.0397
+
+Namespace(run_name='DeepLabV3ResNet_lr4e_4', model_name='DeepLabV3ResNet_lr4e_4', epochs=50, batch_size=32, workers=2, img_resize=512, lr=0.0004, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 16, training loss 0.042997517793074896
+Epoch 16, test data:
+Avg test Loss: 0.0586
+Avg IoU: 0.8926
+Avg L1 Distance: 0.0391
+
+Namespace(run_name='DeepLabV3ResNet_lr5e_4', model_name='DeepLabV3ResNet_lr5e_4', epochs=50, batch_size=32, workers=2, img_resize=512, lr=0.0005, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 14, training loss 0.045384487898453424
+Epoch 14, test data:
+Avg test Loss: 0.0580
+Avg IoU: 0.8935
+Avg L1 Distance: 0.0387
+
+Namespace(run_name='DeepLabV3ResNet_lr7e_5', model_name='DeepLabV3ResNet_lr7e_5', epochs=50, batch_size=32, workers=2, img_resize=512, lr=7e-05, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 19, training loss 0.04033525352892668
+Epoch 19, test data:
+Avg test Loss: 0.0618
+Avg IoU: 0.8868
+Avg L1 Distance: 0.0412
