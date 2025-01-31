@@ -1,0 +1,17 @@
+wn44
+
+Namespace(run_name='UNet_wd_1e_5', model_name='UNet_wd_1e_5', epochs=50, batch_size=32, workers=2, img_resize=256, lr=0.0002, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=0.0001, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 37, training loss 0.0883985415748928
+Epoch 37, test data:
+Avg test Loss: 0.0983
+Avg IoU: 0.8279
+Avg L1 Distance: 0.0655
+
+Namespace(run_name='UNet_wd_1e_4', model_name='UNet_wd_1e_4', epochs=50, batch_size=32, workers=2, img_resize=256, lr=0.0002, opt='Adam', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-05, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 49, training loss 0.06776782118755838
+Epoch 49, test data:
+Avg test Loss: 0.0861
+Avg IoU: 0.8473
+Avg L1 Distance: 0.0574
