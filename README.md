@@ -24,7 +24,7 @@
 | | Model | Description | Resolution | IoU | L1 distance | Download | |
 |-|-------------------|-------------------|----------|----------|----------|----------|-|
 | | UNet | Trained from scratch | 256x256 | 0.8473 | 0.0574 | [weights](./unet/checkpoints/OxfordIIITPet_UNet_wd_1e_4.pth) | |
-| | DeepLabV3_ResNet101 | Pretrained on COCO. Backbone frezed except layer_4 | 512x512 | - | - | - | |
+| | DeepLabV3_ResNet101 | Pretrained on COCO. Backbone frezed except layer_4 | 512x512 | 0.8935 | 0.0387 | [weights](./deeplabv3_resnet101/checkpoints/OxfordIIITPet_DeepLabV3ResNet_lr5e_4.pth) | |
 | | | | | | | | |
 
 > [!NOTE]
