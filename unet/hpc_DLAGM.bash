@@ -61,7 +61,6 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 
 # for the next tests I improved the program by adding the dropout and another data augmentation (color jitter)
 
-
 # dropout 0.15, batch size 32, learning rate 3e-4 (always weight decay 1e-6)
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
@@ -98,8 +97,6 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 # and faster times, so the best batch size is 32, with dropout 0.1. 
 # The best metrics for this run are saved in runs/best_res_2run.txt
 
-COMMENT
-
 # learning rate tests ("grid" search)
 # lr 1e-3
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
@@ -121,5 +118,19 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 # For this run the best performance was IoU 0.8293 and L1 distance 0.0649 
 # by UNet_lr7e_5 so it did not outperform the UNet_dr01_bs32_lr3e_4
 # best results saved in runs/best_res_3run.txt
+
+COMMENT
+
+# test the weight decay 1e-4 and 1e-5 with the best model conf (UNet_dr01_bs32_lr3e_4)
+python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
+--checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
+--run_name UNet_wd_1e_5 --model_name UNet_wd_1e_5 --weight_decay 1e-4
+
+python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
+--checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
+--run_name UNet_wd_1e_4 --model_name UNet_wd_1e_4 --weight_decay 1e-5
+
+# The last run outperform all the previous with a IoU 0.8473 
+# and a L1 distance 0.0574. runs/best_res_4run.txt
 
 conda deactivate
