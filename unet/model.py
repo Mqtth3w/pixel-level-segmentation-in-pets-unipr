@@ -20,25 +20,27 @@ def conv_layer(input_channels, output_channels, dropout_probability): # This is 
     return conv
 
 class Net(nn.Module):
-    def __init__(self, args):
+    def __init__(self, args = None):
         super(Net, self).__init__()
+
+        self.dropout = getattr(args, 'dropout', 0.1)
         
         self.max_pool = nn.MaxPool2d(kernel_size=2, stride=2)
         # input dim 256x256
-        self.down_1 = conv_layer(3, 64, args.dropout) #128x128
-        self.down_2 = conv_layer(64, 128, args.dropout) #64x64
-        self.down_3 = conv_layer(128, 256, args.dropout) #32x32
-        self.down_4 = conv_layer(256, 512, args.dropout) #16x16
-        self.down_5 = conv_layer(512, 1024, args.dropout) #8x8
+        self.down_1 = conv_layer(3, 64, self.dropout) #128x128
+        self.down_2 = conv_layer(64, 128, self.dropout) #64x64
+        self.down_3 = conv_layer(128, 256, self.dropout) #32x32
+        self.down_4 = conv_layer(256, 512, self.dropout) #16x16
+        self.down_5 = conv_layer(512, 1024, self.dropout) #8x8
         
         self.up_1 = nn.ConvTranspose2d(in_channels=1024, out_channels=512, kernel_size=2, stride=2)
-        self.up_conv_1 = conv_layer(1024, 512, args.dropout)
+        self.up_conv_1 = conv_layer(1024, 512, self.dropout)
         self.up_2 = nn.ConvTranspose2d(in_channels=512, out_channels=256, kernel_size=2, stride=2)
-        self.up_conv_2 = conv_layer(512, 256, args.dropout)
+        self.up_conv_2 = conv_layer(512, 256, self.dropout)
         self.up_3 = nn.ConvTranspose2d(in_channels=256, out_channels=128, kernel_size=2, stride=2)
-        self.up_conv_3 = conv_layer(256, 128, args.dropout)
+        self.up_conv_3 = conv_layer(256, 128, self.dropout)
         self.up_4 = nn.ConvTranspose2d(in_channels=128, out_channels=64, kernel_size=2, stride=2)
-        self.up_conv_4 = conv_layer(128, 64, args.dropout)
+        self.up_conv_4 = conv_layer(128, 64, self.dropout)
         # three classes as the Oxford IIIT Pet dataset (each mask should "have" the background, the pet edge and the pet itself)
         self.output = nn.Conv2d(in_channels=64, out_channels=3, kernel_size=1, padding=0)
         self.output_activation = nn.Softmax(dim=1) # [B, C, H, W] 
