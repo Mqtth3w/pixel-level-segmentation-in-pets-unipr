@@ -52,7 +52,7 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --run_name DeepLabV3ResNet_lr7e_5 --model_name DeepLabV3ResNet_lr7e_5 --lr 7e-5
 
 # The best IoU 0.8935 and L1 distance 0.0387, achieved by DeepLabV3ResNet_lr5e_4
-# Check best_res_1run.txt to see the best results of each run
+# Check runs/best_res_1run.txt to see the best results of each run
 
 COMMENT
 
@@ -64,5 +64,8 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
 --run_name DeepLabV3ResNet_wd1e_4 --model_name DeepLabV3ResNet_wd1e_4 --weight_decay 1e-4
+
+# this run did not outperform the DeepLabV3ResNet_lr5e_4
+# Check runs/best_res_2run.txt to see the best results of each run
 
 conda deactivate
