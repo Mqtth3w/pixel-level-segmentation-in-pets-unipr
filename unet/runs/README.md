@@ -4,7 +4,7 @@
 tensorboard --logdir=.
 ```
 
-Best model: UNet_dr01_bs32_lr3e_4
+Best model: UNet_wd_1e_4
 
 ---
 
