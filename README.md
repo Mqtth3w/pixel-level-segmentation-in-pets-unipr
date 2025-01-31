@@ -28,5 +28,5 @@
 | | | | | | | | |
 
 > [!NOTE]
-> These models were trained with A100 40GB GPU and data shuffle, so if you train them again you may obtain different results also depending on your hardware.
+> These models were trained with A100 40GB GPU, A100 80GB GPU and data shuffle, so if you train them again you may obtain different results also depending on your hardware.
 > Of course there may be a better hyper-parameters configuration, this is not necessarily the best.
