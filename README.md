@@ -18,7 +18,6 @@
 ## Nets I decided to train/finetune and test
 - UNet (required)
 - DeepLabV3
-- FCN (?)
 
 ## Best performances achieved
 
@@ -26,7 +25,7 @@
 |-|-------------------|-------------------|----------|----------|----------|----------|-|
 | | UNet | Trained from scratch | 256x256 | 0.8473 | 0.0574 | [weights](./unet/checkpoints/OxfordIIITPet_UNet_wd_1e_4.pth) | |
 | | DeepLabV3_ResNet101 | Pretrained on COCO. Backbone frezed except layer_4 | 512x512 | - | - | - | |
-| | - | - | - | - | - | - | |
+| | | | | | | | |
 
 > [!NOTE]
 > These models were trained with A100 40GB GPU and data shuffle, so if you train them again you may obtain different results also depending on your hardware.
