@@ -9,7 +9,7 @@ import torchvision
 import torch.nn as nn
 
 class Net(nn.Module):
-    def __init__(self, args):
+    def __init__(self, args = None):
         super(Net, self).__init__()
         
         # num_classes=3 (backgroud, pet edge, pet)
@@ -26,6 +26,7 @@ class Net(nn.Module):
         # freze the backbone except the last part (layer4 and classifier)
         # this to have enough degree of fredom and make this finetune comparable with the UNet complete train
         # also because is necessary to pass from 21 classes weights to 3
+        # and to avoid overfit because this net is very big and complex for a small dataset
         for name, param in self.net.backbone.named_parameters():
             if 'layer4' not in name:
                 param.requires_grad = False
