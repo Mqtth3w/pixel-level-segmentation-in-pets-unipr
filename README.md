@@ -17,7 +17,7 @@
 
 ## Nets I decided to train/finetune and test
 - UNet (required)
-- DeepLabV3
+- DeepLabV3_ResNet101
 
 ## Best performances achieved
 
