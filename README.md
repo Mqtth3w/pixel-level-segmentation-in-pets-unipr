@@ -1,5 +1,9 @@
 # pixel-level-segmentation-in-pets-unipr
 
+![Python >=3.9, <=3.12](https://img.shields.io/badge/Python-3.9%20--%203.12-blue)
+![torch 2.5](https://img.shields.io/badge/torch-2.5-8A2BE2)
+![torchvision 0.20](https://img.shields.io/badge/torchvision-0.20-8A2BE2)
+
 ### Project objective:  
 -	Pixel level segmentation in PETS dataset 
 ### Dataset:  
