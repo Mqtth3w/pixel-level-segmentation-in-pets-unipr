@@ -119,7 +119,7 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 # by UNet_lr7e_5 so it did not outperform the UNet_dr01_bs32_lr3e_4
 # best results saved in runs/best_res_3run.txt
 
-COMMENT
+
 
 # test the weight decay 1e-4 and 1e-5 with the best model conf (UNet_dr01_bs32_lr3e_4)
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
@@ -132,5 +132,13 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 
 # The last run outperform all the previous with a IoU 0.8473 
 # and a L1 distance 0.0574. runs/best_res_4run.txt
+
+COMMENT
+
+# At the end I decided to test also the SGD
+python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
+--checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
+--run_name UNet_SGD --model_name UNet_SGD --opt SGD
+
 
 conda deactivate
