@@ -1,0 +1,9 @@
+wn44
+
+Namespace(run_name='UNet_SGD', model_name='UNet_SGD', epochs=50, batch_size=32, workers=2, img_resize=256, lr=0.0002, opt='SGD', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dropout=0.1, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 27, training loss 0.3380226757215417
+Epoch 27, test data:
+Avg test Loss: 0.3455
+Avg IoU: 0.5031
+Avg L1 Distance: 0.2303
