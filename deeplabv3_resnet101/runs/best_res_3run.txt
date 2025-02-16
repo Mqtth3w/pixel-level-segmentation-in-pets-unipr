@@ -1,0 +1,9 @@
+wn45
+
+Namespace(run_name='DeepLabV3ResNet_SGD', model_name='DeepLabV3ResNet_SGD', epochs=50, batch_size=32, workers=2, img_resize=512, lr=0.0005, opt='SGD', loss='dice', patience=6, patience2=5, momentum=0.9, weight_decay=1e-06, dataset_path='/hpc/archive/T_2024_DLAGM/matteo.gianvenuti/', checkpoint_path='/hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints', resume_train=False)
+Device:  cuda:0
+Epoch 50, training loss 0.12550097807593968
+Epoch 50, test data:
+Avg test Loss: 0.1326
+Avg IoU: 0.7703
+Avg L1 Distance: 0.0884
