@@ -54,8 +54,6 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 # The best IoU 0.8935 and L1 distance 0.0387, achieved by DeepLabV3ResNet_lr5e_4
 # Check runs/best_res_1run.txt to see the best results of each run
 
-COMMENT
-
 # Weight decay tests (after each run I always set the new top values as default values)
 python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 --checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
@@ -67,5 +65,12 @@ python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
 
 # this run did not outperform the DeepLabV3ResNet_lr5e_4
 # Check runs/best_res_2run.txt to see the best results of each run
+
+COMMENT
+
+# At the end I decided to test also the SGD
+python ./main.py --dataset_path /hpc/archive/T_2024_DLAGM/matteo.gianvenuti/ \
+--checkpoint_path /hpc/group/T_2024_DLAGM/matteo.gianvenuti/checkpoints \
+--run_name DeepLabV3ResNet_SGD --model_name DeepLabV3ResNet_SGD --opt SGD
 
 conda deactivate
