@@ -26,8 +26,8 @@ def get_args():
     parser.add_argument('--img_resize', type=int, default=512, choices=[128, 256, 512], help='Image resize dimesions')
 
     parser.add_argument('--lr', type=float, default=5e-4, help='Learning rate')
-    parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help = 'Optimizer used for training')
-    parser.add_argument('--loss', type=str, default='dice', choices=['dice', 'CE', 'combo'], help = 'Loss function used for training')
+    parser.add_argument('--opt', type=str, default='Adam', choices=['Adam', 'RSMprop', 'SGD'], help='Optimizer used for training')
+    parser.add_argument('--loss', type=str, default='dice', choices=['dice', 'CE', 'combo'], help='Loss function used for training')
     parser.add_argument('--patience', type=float, default=6, help='Patience for early stopping')
     parser.add_argument('--patience2', type=float, default=5, help='Patience used by the scheduler to reduce the lr')
     parser.add_argument('--momentum', type=float, default=0.9, help='Momentum for bad gradient cases (e.g., flat zone)')
