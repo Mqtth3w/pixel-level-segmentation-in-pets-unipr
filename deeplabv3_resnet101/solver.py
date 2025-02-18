@@ -14,7 +14,7 @@ from model import Net
 
 # Define loss/help functions
 def iou(pred, target):
-    smooth = 1e-4 # avoid zero division
+    smooth = 1e-4
     # pred is [B, 3, H, W] and target is [B, H, W]
     # so one hot encoding fo the mask is necessary
     target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
@@ -26,7 +26,7 @@ def iou(pred, target):
     return iou.mean()
 
 def dc_loss(pred, target):
-    smooth = 1e-4 # avoid zero division
+    smooth = 1e-4
     # the same idea used in iou is applied here
     target = F.one_hot(target, 3).permute(0, 3, 1, 2).float()
     intersection = (pred * target).sum(dim=(1, 2, 3)) # this should use less memory than flattening
